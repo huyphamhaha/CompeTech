@@ -1,15 +1,15 @@
-Các dùng 
-1. Khởi chạy giao diện người dùng
-cd competech/front-end
-npm install
-npm run dev
+HƯỚNG DẪN KHỞI CHẠY DỰ ÁN
 
-2. Khởi chạy giao diện admin
-cd competech/admin/ccpad
-npm install
-npm run dev
+1. Khởi chạy giao diện người dùng (Front-end)
+   cd competech/front-end
+   npm install
+   npm run dev
 
-3. Khởi chạy back-end
-cd competech/back-end
-docker-compose up --build
+2. Khởi chạy giao diện quản trị (Admin)
+   cd competech/admin/ccpad
+   npm install
+   npm run dev
 
+3. Khởi chạy Back-end
+   cd competech/back-end
+   docker-compose up --build
