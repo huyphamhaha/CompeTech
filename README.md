@@ -4,7 +4,7 @@ HƯỚNG DẪN KHỞI CHẠY DỰ ÁN
    ```bash
    cd competech/front-end
    npm install
-   npm run dev
+   docker-compose up --build
 2. Khởi chạy giao diện quản trị (Admin)
    ```bash
    cd competech/admin/ccpad
