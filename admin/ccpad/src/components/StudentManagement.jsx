@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { db } from "../firebase.js";
 import { collection, getDocs, query, where, orderBy } from "firebase/firestore";
+import { useAuth } from "../contexts/AuthContext";
 import {
   Search,
   Filter,
@@ -18,6 +19,7 @@ import {
 } from "lucide-react";
 
 function StudentManagement() {
+  const { user } = useAuth();
   const [students, setStudents] = useState([]);
   const [filteredStudents, setFilteredStudents] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -26,18 +28,28 @@ function StudentManagement() {
   const [sortBy, setSortBy] = useState("firstName");
   const [sortOrder, setSortOrder] = useState("asc");
 
-  const classOptions = [
-    "Tất cả",
-    "10A",
-    "10B",
-    "10C",
-    "11A",
-    "11B",
-    "11C",
-    "12A",
-    "12B",
-    "12C",
-  ];
+  // Tạo danh sách lớp dựa trên quyền người dùng
+  const getClassOptions = () => {
+    if (user?.role === "admin") {
+      return [
+        "Tất cả",
+        "10A",
+        "10B",
+        "10C",
+        "11A",
+        "11B",
+        "11C",
+        "12A",
+        "12B",
+        "12C",
+      ];
+    } else if (user?.role === "teacher") {
+      return [user.class]; // Giáo viên chỉ thấy lớp của mình
+    }
+    return [];
+  };
+
+  const classOptions = getClassOptions();
 
   const sortOptions = [
     { value: "firstName", label: "Họ và Tên" },
@@ -49,8 +61,16 @@ function StudentManagement() {
   ];
 
   useEffect(() => {
-    fetchStudents();
-  }, []);
+    if (user) {
+      // Tự động set lớp cho giáo viên
+      if (user.role === "teacher") {
+        setSelectedClass(user.class);
+      } else {
+        setSelectedClass("Tất cả");
+      }
+      fetchStudents();
+    }
+  }, [user]);
 
   useEffect(() => {
     filterAndSortStudents();
@@ -60,7 +80,21 @@ function StudentManagement() {
     try {
       setLoading(true);
       const usersRef = collection(db, "users");
-      const q = query(usersRef, orderBy("createdAt", "desc"));
+
+      // Tạo query dựa trên quyền người dùng
+      let q;
+      if (user?.role === "teacher") {
+        // Giáo viên chỉ lấy học sinh của lớp mình
+        q = query(
+          usersRef,
+          where("className", "==", user.class),
+          orderBy("createdAt", "desc")
+        );
+      } else {
+        // Admin lấy tất cả học sinh
+        q = query(usersRef, orderBy("createdAt", "desc"));
+      }
+
       const querySnapshot = await getDocs(q);
 
       const studentsData = querySnapshot.docs.map((doc) => ({
@@ -194,7 +228,7 @@ function StudentManagement() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6 mt-20">
+    <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
@@ -241,7 +275,11 @@ function StudentManagement() {
           </div>
 
           {/* Filters */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div
+            className={`grid grid-cols-1 ${
+              user?.role === "admin" ? "md:grid-cols-3" : "md:grid-cols-2"
+            } gap-4`}
+          >
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
               <input
@@ -252,17 +290,30 @@ function StudentManagement() {
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
-            <select
-              value={selectedClass}
-              onChange={(e) => setSelectedClass(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            >
-              {classOptions.map((option) => (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              ))}
-            </select>
+
+            {/* Chỉ hiển thị dropdown lớp cho admin */}
+            {user?.role === "admin" && (
+              <select
+                value={selectedClass}
+                onChange={(e) => setSelectedClass(e.target.value)}
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                {classOptions.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+            )}
+
+            {/* Hiển thị thông tin lớp cho giáo viên */}
+            {user?.role === "teacher" && (
+              <div className="px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 flex items-center">
+                <GraduationCap className="w-4 h-4 text-gray-500 mr-2" />
+                <span className="text-gray-700">Lớp: {user.class}</span>
+              </div>
+            )}
+
             <select
               value={`${sortBy}-${sortOrder}`}
               onChange={(e) => {

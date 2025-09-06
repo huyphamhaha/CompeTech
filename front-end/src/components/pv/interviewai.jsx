@@ -635,7 +635,7 @@ const InterviewApp = () => {
 
     return (
       <div className="px-4 mb-6">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           {/* Progress Bar */}
           <div className="mb-8">
             <div
@@ -722,7 +722,7 @@ const InterviewApp = () => {
       <ProgressSteps currentStep={1} />
       <div className="flex items-center justify-center p-4 max-w-6xl mx-auto">
         <div
-          className="rounded-lg shadow-md p-8 border md:min-w-[800px]"
+          className="rounded-lg shadow-md p-8 border w-full"
           style={{ background: "#FFFFFF", borderColor: THEME.brandMid }}
         >
           <div className="space-y-6">

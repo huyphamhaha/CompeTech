@@ -1350,7 +1350,7 @@ const QuesticAdmissionAdvisor = () => {
         <ArrowLeft className="w-4 h-4" />
         <span className="text-sm font-medium">Quay lại</span>
       </button>
-      <div className="max-w-5xl mx-auto px-4 py-8">
+      <div className="max-w-6xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-3 mb-4">

@@ -1,0 +1,540 @@
+{
+  "yeu_nuoc": {
+    "name": "Yêu nước",
+    "total_points": 20,
+    "criteria": {
+      "PC1.1": {
+        "code": "PC1.1",
+        "description": "Tích cực, chủ động vận động người khác tham gia các hoạt động bảo vệ thiên nhiên.",
+        "point": 4,
+        "behaviors": {
+          "PC1.1.A1": {
+            "code": "PC1.1.A1",
+            "description": "Tham gia, tổ chức và tuyên truyền vận động người khác tham gia hoạt động trồng cây xanh, chăm sóc cây trong trường, lớp.",
+            "point": 2
+          },
+          "PC1.1.A2": {
+            "code": "PC1.1.A2",
+            "description": "Giữ vệ sinh môi trường, bỏ rác đúng nơi quy định; Hạn chế sử dụng túi nilon, chai nhựa dùng một lần.",
+            "point": 2
+          }
+        }
+      },
+      "PC1.2": {
+        "code": "PC1.2",
+        "description": "Tự giác thực hiện và vận động người khác thực hiện các quy định của pháp luật, góp phần bảo vệ và xây dựng Nhà nước xã hội chủ nghĩa Việt Nam.",
+        "point": 4,
+        "behaviors": {
+          "PC1.2.A1": {
+            "code": "PC1.2.A1",
+            "description": "Vận động người khác thực hiện các quy định của pháp luật",
+            "point": 2
+          },
+          "PC1.2.A2": {
+            "code": "PC1.2.A2",
+            "description": "Không tham gia các hành vi vi phạm pháp luật.",
+            "point": 2
+          }
+        }
+      },
+      "PC1.3": {
+        "code": "PC1.3",
+        "description": "Chủ động, tích cực tham gia và vận động người khác tham gia các hoạt động bảo vệ, phát huy giá trị các di sản văn hoá.",
+        "point": 4,
+        "behaviors": {
+          "PC1.3.A1": {
+            "code": "PC1.3.A1",
+            "description": "Tham gia tham quan, tìm hiểu di tích, bảo tàng, di sản văn hóa; Giữ gìn, bảo vệ các công trình, biểu tượng văn hóa ở trường và địa phương; Viết bài, vẽ tranh, làm sản phẩm tuyên truyền về di sản văn hóa.",
+            "point": 2
+          },
+          "PC1.3.A2": {
+            "code": "PC1.3.A2",
+            "description": "Vận động người khác tham gia các hoạt động bảo vệ, phát huy giá trị các di sản văn hoá.",
+            "point": 2
+          }
+        }
+      },
+      "PC1.4": {
+        "code": "PC1.4",
+        "description": "Đấu tranh với các âm mưu, hành động xâm phạm lãnh thổ, biên giới quốc gia, các vùng biển thuộc chủ quyền và quyền chủ quyền của quốc gia bằng thái độ và việc làm phù hợp với lứa tuổi, với quy định của pháp luật.",
+        "point": 4,
+        "behaviors": {
+          "PC1.4.A1": {
+            "code": "PC1.4.A1",
+            "description": "Tích cực học tập môn Lịch sử, GDQP-AN để nâng cao hiểu biết về chủ quyền quốc gia.",
+            "point": 2
+          },
+          "PC1.4.A2": {
+            "code": "PC1.4.A2",
+            "description": "Phản đối, không chia sẻ thông tin sai lệch, xuyên tạc lịch sử trên mạng xã hội.",
+            "point": 1
+          },
+          "PC1.4.A3": {
+            "code": "PC1.4.A3",
+            "description": "Tham gia các cuộc thi tìm hiểu về biển đảo, chủ quyền đất nước.",
+            "point": 1
+          }
+        }
+      },
+      "PC1.5": {
+        "code": "PC1.5",
+        "description": "Sẵn sàng thực hiện nghĩa vụ bảo vệ Tổ quốc.",
+        "point": 4,
+        "behaviors": {
+          "PC1.5.A1": {
+            "code": "PC1.5.A1",
+            "description": "Tham gia nghiêm túc các tiết học Quốc phòng – An ninh.",
+            "point": 2
+          },
+          "PC1.5.A2": {
+            "code": "PC1.5.A2",
+            "description": "Giữ gìn sức khỏe, rèn luyện thể chất để sẵn sàng phục vụ Tổ quốc.",
+            "point": 1
+          },
+          "PC1.5.A3": {
+            "code": "PC1.5.A3",
+            "description": "Hưởng ứng các hoạt động, phong trào hướng về biên giới, hải đảo.",
+            "point": 1
+          }
+        }
+      }
+    }
+  },
+  "nhan_ai": {
+    "name": "Nhân ái",
+    "total_points": 20,
+    "criteria": {
+      "PC2.1": {
+        "code": "PC2.1",
+        "description": "Quan tâm đến mối quan hệ hài hoà với những người khác.",
+        "point": 3,
+        "behaviors": {
+          "PC2.1.A1": {
+            "code": "PC2.1.A1",
+            "description": "Giao tiếp thân thiện, lịch sự với gia đình, bạn bè, thầy cô,…",
+            "point": 1
+          },
+          "PC2.1.A2": {
+            "code": "PC2.1.A2",
+            "description": "Chia sẻ, giúp đỡ bạn bè trong học tập, sinh hoạt.",
+            "point": 1
+          },
+          "PC2.1.A3": {
+            "code": "PC2.1.A3",
+            "description": "Biết lắng nghe và tôn trọng ý kiến người khác.",
+            "point": 1
+          }
+        }
+      },
+      "PC2.2": {
+        "code": "PC2.2",
+        "description": "Tôn trọng quyền và lợi ích hợp pháp của mọi người; đấu tranh với những hành vi xâm phạm quyền và lợi ích hợp pháp của tổ chức, cá nhân.",
+        "point": 3,
+        "behaviors": {
+          "PC2.2.A1": {
+            "code": "PC2.2.A1",
+            "description": "Tôn trọng quyền và lợi ích hợp pháp của mọi người.",
+            "point": 2
+          },
+          "PC2.2.A2": {
+            "code": "PC2.2.A2",
+            "description": "Đấu tranh với những hành vi xâm phạm quyền và lợi ích hợp pháp của tổ chức, cá nhân.",
+            "point": 1
+          }
+        }
+      },
+      "PC2.3": {
+        "code": "PC2.3",
+        "description": "Chủ động, tích cực vận động người khác tham gia các hoạt động từ thiện và hoạt động phục vụ cộng đồng.",
+        "point": 4,
+        "behaviors": {
+          "PC2.3.A1": {
+            "code": "PC2.3.A1",
+            "description": "Tình nguyện tham gia các hoạt động từ thiện và hoạt động phục vụ cộng đồng.",
+            "point": 2
+          },
+          "PC2.3.A2": {
+            "code": "PC2.3.A2",
+            "description": "Vận động bạn bè, gia đình cùng tham gia thiện nguyện.",
+            "point": 2
+          }
+        }
+      },
+      "PC2.4": {
+        "code": "PC2.4",
+        "description": "Tôn trọng sự khác biệt về lựa chọn nghề nghiệp, hoàn cảnh sống, sự đa dạng văn hoá cá nhân.",
+        "point": 4,
+        "behaviors": {
+          "PC2.4.A1": {
+            "code": "PC2.4.A1",
+            "description": "Tôn trọng bạn có hoàn cảnh khó khăn, khuyết tật.",
+            "point": 2
+          },
+          "PC2.4.A2": {
+            "code": "PC2.4.A2",
+            "description": "Không kỳ thị giới tính, nghề nghiệp, dân tộc.",
+            "point": 2
+          }
+        }
+      },
+      "PC2.5": {
+        "code": "PC2.5",
+        "description": "Có ý thức học hỏi các nền văn hoá trên thế giới.",
+        "point": 3,
+        "behaviors": {
+          "PC2.5.A1": {
+            "code": "PC2.5.A1",
+            "description": "Tìm hiểu văn hoá qua sách, báo, internet; Biết tôn trọng sự khác biệt văn hoá.",
+            "point": 2
+          },
+          "PC2.5.A2": {
+            "code": "PC2.5.A2",
+            "description": "Tham gia, vận động bạn bè tham gia các hoạt động giao lưu quốc tế.",
+            "point": 1
+          }
+        }
+      },
+      "PC2.6": {
+        "code": "PC2.6",
+        "description": "Cảm thông, độ lượng với những hành vi, thái độ có lỗi của người khác.",
+        "point": 3,
+        "behaviors": {
+          "PC2.6.A1": {
+            "code": "PC2.6.A1",
+            "description": "Biết tha thứ khi người khác xin lỗi.",
+            "point": 2
+          },
+          "PC2.6.A2": {
+            "code": "PC2.6.A2",
+            "description": "Góp ý chân thành, không chỉ trích nặng nề.",
+            "point": 1
+          }
+        }
+      }
+    }
+  },
+  "cham_chi": {
+    "name": "Chăm chỉ",
+    "total_points": 20,
+    "criteria": {
+      "PC3.1": {
+        "code": "PC3.1",
+        "description": "Có ý thức đánh giá điểm mạnh, điểm yếu của bản thân, thuận lợi, khó khăn trong học tập để xây dựng kế hoạch học tập.",
+        "point": 5,
+        "behaviors": {
+          "PC3.1.A1": {
+            "code": "PC3.1.A1",
+            "description": "Tự nhận xét năng lực, ưu – nhược điểm của bản thân trong học tập.",
+            "point": 3
+          },
+          "PC3.1.A2": {
+            "code": "PC3.1.A2",
+            "description": "Lập kế hoạch học tập theo tuần/tháng; Điều chỉnh kế hoạch học tập phù hợp khi gặp khó khăn.",
+            "point": 2
+          }
+        }
+      },
+      "PC3.2": {
+        "code": "PC3.2",
+        "description": "Tích cực tìm tòi và sáng tạo trong học tập; có ý chí vượt qua khó khăn để đạt kết quả tốt trong học tập.",
+        "point": 5,
+        "behaviors": {
+          "PC3.2.A1": {
+            "code": "PC3.2.A1",
+            "description": "Tích cực tìm tòi và sáng tạo trong học tập; Đặt câu hỏi, nêu sáng kiến khi học.",
+            "point": 3
+          },
+          "PC3.2.A2": {
+            "code": "PC3.2.A2",
+            "description": "Có ý chí vượt qua khó khăn để đạt kết quả tốt trong học tập.",
+            "point": 2
+          }
+        }
+      },
+      "PC3.3": {
+        "code": "PC3.3",
+        "description": "Tích cực tham gia và vận động mọi người tham gia các công việc phục vụ cộng đồng.",
+        "point": 3,
+        "behaviors": {
+          "PC3.3.A1": {
+            "code": "PC3.3.A1",
+            "description": "Tích cực tham gia lao động công ích (dọn vệ sinh, trực nhật), công việc tập thể, phục vụ cộng đồng.",
+            "point": 2
+          },
+          "PC3.3.A2": {
+            "code": "PC3.3.A2",
+            "description": "Vận động bạn bè cùng tham gia các công việc phục vụ cộng đồng.",
+            "point": 1
+          }
+        }
+      },
+      "PC3.4": {
+        "code": "PC3.4",
+        "description": "Có ý chí vượt qua khó khăn để đạt kết quả tốt trong lao động.",
+        "point": 3,
+        "behaviors": {
+          "PC3.4.A1": {
+            "code": "PC3.4.A1",
+            "description": "Làm việc kiên trì, không bỏ dở.",
+            "point": 1
+          },
+          "PC3.4.A2": {
+            "code": "PC3.4.A2",
+            "description": "Hoàn thành công việc đúng thời gian.",
+            "point": 1
+          },
+          "PC3.4.A3": {
+            "code": "PC3.4.A3",
+            "description": "Cải tiến cách làm để đạt hiệu quả cao hơn.",
+            "point": 1
+          }
+        }
+      },
+      "PC3.5": {
+        "code": "PC3.5",
+        "description": "Tích cực học tập, rèn luyện để chuẩn bị cho nghề nghiệp tương lai.",
+        "point": 4,
+        "behaviors": {
+          "PC3.5.A1": {
+            "code": "PC3.5.A1",
+            "description": "Chủ động học tập, tìm hiểu nghề nghiệp qua hoạt động hướng nghiệp.",
+            "point": 2
+          },
+          "PC3.5.A2": {
+            "code": "PC3.5.A2",
+            "description": "Rèn luyện kỹ năng mềm cần thiết cho nghề nghiệp tương lai.",
+            "point": 2
+          }
+        }
+      }
+    }
+  },
+  "trung_thuc": {
+    "name": "Trung thực",
+    "total_points": 20,
+    "criteria": {
+      "PC4.1": {
+        "code": "PC4.1",
+        "description": "Nhận thức và hành động theo lẽ phải.",
+        "point": 8,
+        "behaviors": {
+          "PC4.1.A1": {
+            "code": "PC4.1.A1",
+            "description": "Biết phân biệt đúng – sai, nói đúng sự thật.",
+            "point": 4
+          },
+          "PC4.1.A2": {
+            "code": "PC4.1.A2",
+            "description": "Biết hành động theo lẽ phải.",
+            "point": 4
+          }
+        }
+      },
+      "PC4.2": {
+        "code": "PC4.2",
+        "description": "Sẵn sàng đấu tranh bảo vệ lẽ phải, bảo vệ người tốt, điều tốt.",
+        "point": 6,
+        "behaviors": {
+          "PC4.2.A1": {
+            "code": "PC4.2.A1",
+            "description": "Biết phân đấu tranh bảo vệ lẽ phải.",
+            "point": 2
+          },
+          "PC4.2.A2": {
+            "code": "PC4.2.A2",
+            "description": "Góp ý thẳng thắn khi thấy sai trái.",
+            "point": 2
+          },
+          "PC4.2.A3": {
+            "code": "PC4.2.A3",
+            "description": "Ủng hộ, động viên hành vi tích cực.",
+            "point": 2
+          }
+        }
+      },
+      "PC4.3": {
+        "code": "PC4.3",
+        "description": "Tự giác tham gia và vận động người khác tham gia phát hiện, đấu tranh với các hành vi thiếu trung thực trong học tập và trong cuộc sống, các hành vi vi phạm chuẩn mực đạo đức và quy định của pháp luật.",
+        "point": 6,
+        "behaviors": {
+          "PC4.3.A1": {
+            "code": "PC4.3.A1",
+            "description": "Không gian lận trong học tập, kiểm tra, thi cử và cuộc sống",
+            "point": 2
+          },
+          "PC4.3.A2": {
+            "code": "PC4.3.A2",
+            "description": "Tự giác tham gia phát hiện, đấu tranh với các hành vi thiếu trung thực trong học tập và trong cuộc sống, các hành vi vi phạm chuẩn mực đạo đức và quy định của pháp luật; Báo cáo khi phát hiện gian lận.",
+            "point": 2
+          },
+          "PC4.3.A3": {
+            "code": "PC4.3.A3",
+            "description": "Vận động bạn bè cùng thực hiện trung thực trong học tập và cuộc sống.",
+            "point": 2
+          }
+        }
+      }
+    }
+  },
+  "trach_nhiem": {
+    "name": "Trách nhiệm",
+    "total_points": 20,
+    "criteria": {
+      "PC5.1": {
+        "code": "PC5.1",
+        "description": "Tích cực, tự giác và nghiêm túc rèn luyện, tu dưỡng đạo đức của bản thân.",
+        "point": 1,
+        "behaviors": {
+          "PC5.1.A1": {
+            "code": "PC5.1.A1",
+            "description": "Giữ tác phong đúng mực của học sinh; Tự giác rèn luyện, tu dưỡng đạo đức của bản thân.",
+            "point": 1
+          }
+        }
+      },
+      "PC5.2": {
+        "code": "PC5.2",
+        "description": "Có ý thức sử dụng tiền hợp lí khi ăn uống, mua sắm đồ dùng học tập, sinh hoạt.",
+        "point": 2,
+        "behaviors": {
+          "PC5.2.A1": {
+            "code": "PC5.2.A1",
+            "description": "Chi tiêu tiết kiệm, hợp lí; Ưu tiên mua sắm phục vụ học tập.",
+            "point": 1
+          },
+          "PC5.2.A2": {
+            "code": "PC5.2.A2",
+            "description": "Biết quản lí chi tiêu cá nhân.",
+            "point": 1
+          }
+        }
+      },
+      "PC5.3": {
+        "code": "PC5.3",
+        "description": "Sẵn sàng chịu trách nhiệm về những lời nói và hành động của bản thân.",
+        "point": 2,
+        "behaviors": {
+          "PC5.3.A1": {
+            "code": "PC5.3.A1",
+            "description": "Dám nhận lỗi khi sai; Chịu trách nhiệm với việc làm của mình.",
+            "point": 1
+          },
+          "PC5.3.A2": {
+            "code": "PC5.3.A2",
+            "description": "Không đổ lỗi cho người khác.",
+            "point": 1
+          }
+        }
+      },
+      "PC5.4": {
+        "code": "PC5.4",
+        "description": "Có ý thức làm tròn bổn phận với người thân và gia đình.",
+        "point": 3,
+        "behaviors": {
+          "PC5.4.A1": {
+            "code": "PC5.4.A1",
+            "description": "Kính trọng, giúp đỡ, làm tròn bổn phận với cha mẹ, người thân,...",
+            "point": 3
+          }
+        }
+      },
+      "PC5.5": {
+        "code": "PC5.5",
+        "description": "Quan tâm bàn bạc với người thân, xây dựng và thực hiện kế hoạch chi tiêu hợp lí trong gia đình.",
+        "point": 2,
+        "behaviors": {
+          "PC5.5.A1": {
+            "code": "PC5.5.A1",
+            "description": "Tham gia xây dựng kế hoạch chi tiêu gia đình, đề xuất ý kiến tiết kiệm hợp lí.",
+            "point": 1
+          },
+          "PC5.5.A2": {
+            "code": "PC5.5.A2",
+            "description": "Thực hiện kế hoạch chi tiêu hợp lí trong gia đình.",
+            "point": 1
+          }
+        }
+      },
+      "PC5.6": {
+        "code": "PC5.6",
+        "description": "Tích cực tham gia và vận động người khác tham gia các hoạt động công ích.",
+        "point": 2,
+        "behaviors": {
+          "PC5.6.A1": {
+            "code": "PC5.6.A1",
+            "description": "Tích cực tham gia các hoạt động công ích.",
+            "point": 1
+          },
+          "PC5.6.A2": {
+            "code": "PC5.6.A2",
+            "description": "Vận động người khác tham gia các hoạt động công ích.",
+            "point": 1
+          }
+        }
+      },
+      "PC5.7": {
+        "code": "PC5.7",
+        "description": "Tích cực tham gia và vận động người khác tham gia các hoạt động tuyên truyền pháp luật.",
+        "point": 2,
+        "behaviors": {
+          "PC5.7.A1": {
+            "code": "PC5.7.A1",
+            "description": "Tích cực tham gia các hoạt động tuyên truyền pháp luật.",
+            "point": 1
+          },
+          "PC5.7.A2": {
+            "code": "PC5.7.A2",
+            "description": "Vận động người khác tham gia các hoạt động tuyên truyền pháp luật.",
+            "point": 1
+          }
+        }
+      },
+      "PC5.8": {
+        "code": "PC5.8",
+        "description": "Đánh giá được hành vi chấp hành kỉ luật, pháp luật của bản thân và người khác; đấu tranh phê bình các hành vi vô kỉ luật, vi phạm pháp luật.",
+        "point": 1,
+        "behaviors": {
+          "PC5.8.A1": {
+            "code": "PC5.8.A1",
+            "description": "Đánh giá được hành vi chấp hành kỉ luật, pháp luật của bản thân và người khác; đấu tranh phê bình các hành vi vô kỉ luật, vi phạm pháp luật.",
+            "point": 1
+          }
+        }
+      },
+      "PC5.9": {
+        "code": "PC5.9",
+        "description": "Hiểu rõ ý nghĩa của tiết kiệm đối với sự phát triển bền vững; có ý thức tiết kiệm tài nguyên thiên nhiên; đấu tranh ngăn chặn các hành vi sử dụng bừa bãi, lãng phí vật dụng, tài nguyên.",
+        "point": 3,
+        "behaviors": {
+          "PC5.9.A1": {
+            "code": "PC5.9.A1",
+            "description": "Hiểu rõ ý nghĩa của tiết kiệm đối với sự phát triển bền vững; có ý thức tiết kiệm tài nguyên thiên nhiên.",
+            "point": 2
+          },
+          "PC5.9.A2": {
+            "code": "PC5.9.A2",
+            "description": "Đấu tranh ngăn chặn các hành vi sử dụng bừa bãi, lãng phí vật dụng, tài nguyên.",
+            "point": 1
+          }
+        }
+      },
+      "PC5.10": {
+        "code": "PC5.10",
+        "description": "Chủ động, tích cực tham gia và vận động người khác tham gia các hoạt động tuyên truyền, chăm sóc, bảo vệ thiên nhiên, ứng phó với biến đổi khí hậu và phát triển bền vững.",
+        "point": 2,
+        "behaviors": {
+          "PC5.10.A1": {
+            "code": "PC5.10.A1",
+            "description": "Chủ động, tích cực tham gia các hoạt động tuyên truyền, chăm sóc, bảo vệ thiên nhiên, ứng phó với biến đổi khí hậu và phát triển bền vững.",
+            "point": 1
+          },
+          "PC5.10.A2": {
+            "code": "PC5.10.A2",
+            "description": "Vận động người khác tham gia các hoạt động tuyên truyền, chăm sóc, bảo vệ thiên nhiên, ứng phó với biến đổi khí hậu và phát triển bền vững.",
+            "point": 1
+          }
+        }
+      }
+    }
+  }
+}

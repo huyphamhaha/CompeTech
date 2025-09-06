@@ -31,6 +31,7 @@ import BlogEdit from "./components/forum/edit.jsx";
 import MyPost from "./components/forum/mypost.jsx";
 import Events from "./components/events/Events.jsx";
 import AIAnalysis from "./components/AIAnalysis/AIAnalysis.jsx";
+import MigrateToFirebase from "./components/MigrateToFirebase.jsx";
 
 function App() {
   return (
@@ -254,6 +255,15 @@ function App() {
           element={
             <ProGuard>
               <AIAnalysis />
+            </ProGuard>
+          }
+        />
+
+        <Route
+          path="/migrate-to-firebase"
+          element={
+            <ProGuard>
+              <MigrateToFirebase />
             </ProGuard>
           }
         />

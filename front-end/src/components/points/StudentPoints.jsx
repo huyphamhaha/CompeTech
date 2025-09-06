@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { db } from "../firebase.js";
-import { collection, getDocs, query, where, orderBy } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+  orderBy,
+  onSnapshot,
+} from "firebase/firestore";
 import { useAuth } from "../../contexts/AuthContext.jsx";
 import Header from "../Header/header.jsx";
 import { Link } from "react-router-dom";
@@ -21,13 +28,41 @@ import {
 function StudentPoints() {
   const [studentPoints, setStudentPoints] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState("all"); // all, penalty, reward
+  const [activeTab, setActiveTab] = useState("all"); // all, penalty, reward, behavior
   const { user, userDetails, isLoading: authLoading } = useAuth();
 
   useEffect(() => {
     // Chỉ gọi fetchStudentPoints khi user đã đăng nhập và userDetails đã được tải
     if (user && userDetails && !authLoading) {
       fetchStudentPoints();
+
+      // Set up real-time listener for student points
+      const studentId = user.uid;
+      const pointsRef = collection(db, "studentPoints");
+      const q = query(
+        pointsRef,
+        where("studentId", "==", studentId),
+        orderBy("createdAt", "desc")
+      );
+
+      const unsubscribe = onSnapshot(
+        q,
+        (snapshot) => {
+          const pointsData = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+            createdAt: doc.data().createdAt?.toDate?.() || new Date(),
+            updatedAt: doc.data().updatedAt?.toDate?.() || null,
+            awardedAt: doc.data().awardedAt?.toDate?.() || null,
+          }));
+          setStudentPoints(pointsData);
+        },
+        (error) => {
+          console.error("Error listening to student points:", error);
+        }
+      );
+
+      return () => unsubscribe();
     }
   }, [user, userDetails, authLoading]);
 
@@ -75,11 +110,13 @@ function StudentPoints() {
   };
 
   const getTotalPoints = () => {
-    let total = 100; // Điểm mặc định
+    let total = 0; // Điểm ban đầu là 0
     studentPoints.forEach((point) => {
       // Cộng trực tiếp tất cả điểm vào tổng
-      // Điểm cộng (reward): points > 0, điểm trừ (penalty): points < 0
-      total += point.points;
+      // Điểm cộng (reward): points > 0, điểm trừ (penalty): points < 0, điểm biểu hiện (behavior): points > 0
+      if (point.status === "approved") {
+        total += point.points;
+      }
     });
     return Math.max(0, total); // Đảm bảo điểm không âm
   };
@@ -87,18 +124,24 @@ function StudentPoints() {
   const getPointsSummary = () => {
     // Tính tổng điểm trừ (lấy giá trị tuyệt đối để hiển thị)
     const totalPenalty = studentPoints
-      .filter((p) => p.type === "penalty")
+      .filter((p) => p.type === "penalty" && p.status === "approved")
       .reduce((sum, p) => sum + Math.abs(p.points), 0);
 
     // Tính tổng điểm cộng
     const totalReward = studentPoints
-      .filter((p) => p.type === "reward")
+      .filter((p) => p.type === "reward" && p.status === "approved")
+      .reduce((sum, p) => sum + p.points, 0);
+
+    // Tính tổng điểm biểu hiện
+    const totalBehavior = studentPoints
+      .filter((p) => p.type === "behavior" && p.status === "approved")
       .reduce((sum, p) => sum + p.points, 0);
 
     return {
-      total: studentPoints.length,
+      total: studentPoints.filter((p) => p.status === "approved").length,
       totalPenalty,
       totalReward,
+      totalBehavior,
     };
   };
 
@@ -178,8 +221,13 @@ function StudentPoints() {
               className="mt-3 text-lg max-w-2xl mx-auto"
               style={{ color: "#064232CC" }}
             >
-              Theo dõi điểm cộng, điểm trừ và hạnh kiểm của bạn
+              Theo dõi điểm cộng, điểm trừ và hạnh kiểm của bạn - Cập nhật
+              real-time
             </p>
+            <div className="flex items-center justify-center gap-2 mt-2">
+              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+              <span className="text-sm text-green-600">Live updates</span>
+            </div>
           </div>
 
           {/* Student Info Card */}
@@ -232,7 +280,7 @@ function StudentPoints() {
           )}
 
           {/* Points Summary */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
             <div
               className="bg-white rounded-2xl shadow-lg border p-4 text-center"
               style={{ borderColor: "#568F87" }}
@@ -295,6 +343,27 @@ function StudentPoints() {
                 Điểm trừ
               </p>
             </div>
+
+            <div
+              className="bg-white rounded-2xl shadow-lg border p-4 text-center"
+              style={{ borderColor: "#568F87" }}
+            >
+              <div
+                className="w-10 h-10 rounded-xl flex items-center justify-center mx-auto mb-3"
+                style={{ background: "#FCE3E1" }}
+              >
+                <User className="w-5 h-5" style={{ color: "#064232" }} />
+              </div>
+              <div
+                className="text-2xl font-bold mb-1"
+                style={{ color: "#064232" }}
+              >
+                {getPointsSummary().totalBehavior}
+              </div>
+              <p className="text-xs" style={{ color: "#064232CC" }}>
+                Điểm biểu hiện
+              </p>
+            </div>
           </div>
 
           {/* Tabs */}
@@ -332,6 +401,16 @@ function StudentPoints() {
                 }`}
               >
                 Điểm trừ
+              </button>
+              <button
+                onClick={() => setActiveTab("behavior")}
+                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                  activeTab === "behavior"
+                    ? "bg-purple-500 text-white shadow-sm"
+                    : "text-gray-600 hover:text-gray-900"
+                }`}
+              >
+                Biểu hiện
               </button>
             </div>
           </div>
@@ -372,6 +451,8 @@ function StudentPoints() {
                     className={`p-4 rounded-xl border-2 ${
                       point.type === "penalty"
                         ? "border-red-200 bg-red-50"
+                        : point.type === "behavior"
+                        ? "border-purple-200 bg-purple-50"
                         : "border-green-200 bg-green-50"
                     }`}
                   >
@@ -381,11 +462,15 @@ function StudentPoints() {
                           className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm ${
                             point.type === "penalty"
                               ? "bg-red-500"
+                              : point.type === "behavior"
+                              ? "bg-purple-500"
                               : "bg-green-500"
                           }`}
                         >
                           {point.type === "penalty" ? (
                             <Minus size={16} />
+                          ) : point.type === "behavior" ? (
+                            <User size={16} />
                           ) : (
                             <Award size={16} />
                           )}
@@ -398,7 +483,9 @@ function StudentPoints() {
                             {point.ruleCode || "N/A"}
                           </h4>
                           <p className="text-xs" style={{ color: "#064232CC" }}>
-                            Mã quy tắc
+                            {point.type === "behavior"
+                              ? "Mã biểu hiện"
+                              : "Mã quy tắc"}
                           </p>
                         </div>
                       </div>
@@ -407,10 +494,12 @@ function StudentPoints() {
                           className={`text-2xl font-bold ${
                             point.type === "reward"
                               ? "text-green-600"
+                              : point.type === "behavior"
+                              ? "text-purple-600"
                               : "text-red-600"
                           }`}
                         >
-                          {point.type === "reward"
+                          {point.type === "reward" || point.type === "behavior"
                             ? `+${point.points} điểm`
                             : `${point.points} điểm`}
                         </div>
@@ -466,7 +555,7 @@ function StudentPoints() {
                   <li className="flex items-start gap-2">
                     <span className="text-xs mt-1">•</span>
                     <span>
-                      Điểm hạnh kiểm ban đầu của mỗi học sinh là 100 điểm
+                      Điểm hạnh kiểm ban đầu của mỗi học sinh là 0 điểm
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
@@ -476,6 +565,13 @@ function StudentPoints() {
                   <li className="flex items-center gap-2">
                     <span className="text-xs mt-1">•</span>
                     <span>Điểm cộng sẽ được tính vào tổng điểm hạnh kiểm</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-xs mt-1">•</span>
+                    <span>
+                      Điểm biểu hiện tối đa là 100 điểm, được tính dựa trên các
+                      hành vi tích cực
+                    </span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-xs mt-1">•</span>

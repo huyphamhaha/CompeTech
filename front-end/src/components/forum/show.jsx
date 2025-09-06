@@ -416,7 +416,7 @@ const BlogView = () => {
                 <form onSubmit={handleCommentSubmit}>
                   <div className="post-comment-container">
                     <img
-                      src={user?.photo}
+                      src={user?.photo || "/default-avatar.png"}
                       alt=""
                       style={{
                         width: "50px",
@@ -546,11 +546,11 @@ const BlogView = () => {
                         >
                           <div className="post-comment-container">
                             <img
-                              src={user?.photo}
+                              src={user?.photo || "/default-avatar.png"}
                               alt=""
                               style={{
-                                width: "40px",
-                                height: "40px",
+                                width: "40px !important",
+                                height: "40px !important",
                                 borderRadius: "50%",
                                 objectFit: "cover",
                                 border: "1px solid #000",

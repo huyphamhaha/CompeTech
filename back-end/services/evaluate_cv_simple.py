@@ -42,7 +42,7 @@ except ImportError as e:
     # Fallback configuration
     class Config:
         GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
-        ALLOWED_ORIGINS = ['http://localhost:3000']
+        ALLOWED_ORIGINS = ['http://localhost:3000', 'http://localhost:5174']
     
     # Mock decorators for testing
     # def firebase_required(f): return f
@@ -380,12 +380,11 @@ try:
 except:
     logger.warning("Using fallback configuration")
 
-# Configure CORS
-CORS(app, 
-     origins=getattr(Config, 'ALLOWED_ORIGINS', ['http://localhost:3000']),
+CORS(app,
+     origins=getattr(Config, 'ALLOWED_ORIGINS'),
      allow_headers=['Content-Type', 'Authorization'],
      supports_credentials=True)
-app.register_blueprint(auth_bp)
+
 
 # Initialize CV evaluation service
 cv_service = SimpleCVEvaluationService()

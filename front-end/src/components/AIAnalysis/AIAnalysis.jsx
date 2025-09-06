@@ -22,7 +22,7 @@ import {
 import "./AIAnalysis.css";
 import ActivityChart from "./ActivityChart";
 import { generateImprovementPlan } from "../services/improvementPlanService";
-import Header from "../Header/Header";
+import Header from "../Header/header";
 
 // Đã bỏ phần Recommendations
 

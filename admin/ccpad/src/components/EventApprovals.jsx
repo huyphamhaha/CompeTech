@@ -53,7 +53,7 @@ const EventApprovals = () => {
 
   if (loading) return <div>Đang tải...</div>;
   return (
-    <div className="max-w-6xl mx-auto p-4 mt-8">
+    <div className="max-w-6xl mx-auto p-4">
       <h2 className="text-xl font-semibold mb-4">Duyệt đăng ký sự kiện</h2>
       <div className="space-y-4">
         {events.map((event) => (

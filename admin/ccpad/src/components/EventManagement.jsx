@@ -173,7 +173,7 @@ const EventManagement = () => {
 
   if (loading) return <div className="mt-8">Đang tải...</div>;
   return (
-    <div className="max-w-6xl mx-auto p-4 mt-8">
+    <div className="max-w-6xl mx-auto p-4">
       <h2 className="text-xl font-semibold mb-4">Tạo sự kiện</h2>
       <form
         onSubmit={createEvent}

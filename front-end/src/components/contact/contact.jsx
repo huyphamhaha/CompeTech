@@ -9,7 +9,7 @@ import {
   Linkedin,
   Sparkles,
 } from "lucide-react";
-import Header from "../header/header";
+import Header from "../Header/header";
 
 const Contact = () => {
   const [formData, setFormData] = useState({

@@ -8,49 +8,64 @@ import {
   Settings,
   LogOut,
   FileText,
+  FileCode,
+  CheckSquare,
 } from "lucide-react";
+import { useAuth } from "../contexts/AuthContext";
 
 function Navigation() {
   const location = useLocation();
+  const { user, logout } = useAuth();
 
-  const navItems = [
+  const allNavItems = [
     {
       path: "/",
       label: "Quản lý Học sinh",
       icon: Users,
       description: "Xem và quản lý danh sách học sinh",
+      roles: ["admin", "teacher"],
     },
     {
       path: "/rules",
       label: "Nội quy",
       icon: BookOpen,
       description: "Thiết lập quy tắc điểm cộng/trừ",
+      roles: ["admin"],
     },
     {
       path: "/points",
       label: "Quản lý Điểm",
       icon: Award,
       description: "Thêm điểm cộng/trừ cho học sinh",
+      roles: ["admin", "teacher"],
     },
     {
       path: "/evidence",
       label: "Minh chứng",
       icon: FileText,
       description: "Xét duyệt minh chứng của học sinh",
+      roles: ["admin"],
     },
     {
       path: "/events",
       label: "Sự kiện",
       icon: Eye,
       description: "Tạo và quản lý sự kiện",
+      roles: ["admin"],
     },
     {
       path: "/approvals",
       label: "Duyệt đăng ký",
       icon: Settings,
       description: "Duyệt hoặc từ chối đăng ký tham gia sự kiện",
+      roles: ["admin"],
     },
   ];
+
+  // Lọc menu theo quyền người dùng
+  const navItems = allNavItems.filter((item) =>
+    item.roles.includes(user?.role)
+  );
 
   const isActive = (path) => {
     if (path === "/") {
@@ -87,6 +102,21 @@ function Navigation() {
                 );
               })}
             </div>
+          </div>
+
+          {/* User info and logout */}
+          <div className="flex items-center">
+            {user && (
+              <div className="flex items-center space-x-4">
+                <button
+                  onClick={logout}
+                  className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                >
+                  <LogOut size={16} className="mr-2" />
+                  Đăng xuất
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>

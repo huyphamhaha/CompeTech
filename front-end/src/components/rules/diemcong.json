@@ -1,0 +1,416 @@
+{
+  "yeu_nuoc": {
+    "name": "Yêu nước",
+    "criteria": {
+      "PC1.2": {
+        "code": "PC1.2",
+        "description": "Tự giác thực hiện và vận động người khác thực hiện các quy định của pháp luật, góp phần bảo vệ và xây dựng Nhà nước xã hội chủ nghĩa Việt Nam.",
+        "point": 4,
+        "plus": {
+          "PC1.2.C1": {
+            "code": "PC1.2.C1",
+            "description": "Tham gia hoặc tổ chức cuộc thi tìm hiểu pháp luật; Viết bài tuyên truyền ATGT.",
+            "point": "conditional",
+            "conditions": [
+              {
+                "type": "tham_gia",
+                "point": 2,
+                "description": "Tham gia"
+              },
+              {
+                "type": "to_chuc",
+                "point": 4,
+                "description": "Tổ chức"
+              }
+            ]
+          },
+          "PC1.2.C2": {
+            "code": "PC1.2.C2",
+            "description": "Tổ chức các hoạt động phong trào của nhà trường, Đoàn trường … (Gửi danh sách do GVCN và Đoàn trường xác nhận)",
+            "point": 4
+          },
+          "PC1.2.C3": {
+            "code": "PC1.2.C3",
+            "description": "Trực tiếp tham gia các hoạt động thi đua phong trào của nhà trường, Đoàn trường, cấp ngành... (GVCN gửi danh sách cho BCH Đoàn trường xác nhận)",
+            "point": "conditional",
+            "conditions": [
+              {
+                "type": "tham_gia_khong_giai",
+                "point": 1,
+                "description": "Tham gia không có giải hoặc Giải Khuyến khích"
+              },
+              {
+                "type": "giai_ba",
+                "point": 2,
+                "description": "Giải Ba"
+              },
+              {
+                "type": "giai_nhi",
+                "point": 3,
+                "description": "Giải Nhì"
+              },
+              {
+                "type": "giai_nhat",
+                "point": 4,
+                "description": "Giải Nhất"
+              }
+            ]
+          }
+        }
+      },
+      "PC1.3": {
+        "code": "PC1.3",
+        "description": "Chủ động, tích cực tham gia và vận động người khác tham gia các hoạt động bảo vệ, phát huy giá trị các di sản văn hoá.",
+        "point": 4,
+        "plus": {
+          "PC1.3.C1": {
+            "code": "PC1.3.C1",
+            "description": "Viết bài cảm nhận về di tích lịch sử, vẽ tranh cổ động bảo vệ di sản văn hóa,... để tham gia sự kiện, cuộc thi (có minh chứng).",
+            "point": 2
+          },
+          "PC1.3.C2": {
+            "code": "PC1.3.C2",
+            "description": "Tham gia văn nghệ sân khấu hóa lịch sử có xác nhận của Giáo viên.",
+            "point": 2
+          }
+        }
+      },
+      "PC1.4": {
+        "code": "PC1.4",
+        "description": "Đấu tranh với các âm mưu, hành động xâm phạm lãnh thổ, biên giới quốc gia, các vùng biển thuộc chủ quyền và quyền chủ quyền của quốc gia bằng thái độ và việc làm phù hợp với lứa tuổi, với quy định của pháp luật.",
+        "point": 4,
+        "plus": {
+          "PC1.4.C1": {
+            "code": "PC1.4.C1",
+            "description": "Tham gia cuộc thi liên quan đến \"Tìm hiểu biển đảo\" có minh chứng.",
+            "point": 2
+          },
+          "PC1.4.C2": {
+            "code": "PC1.4.C2",
+            "description": "Phát hiện và báo cáo kịp thời với nhà trường các trường hợp có phát ngôn, hàng động,… xuyên tạc, xâm phạm lãnh thổ,…",
+            "point": 2
+          }
+        }
+      },
+      "PC1.5": {
+        "code": "PC1.5",
+        "description": "Sẵn sàng thực hiện nghĩa vụ bảo vệ Tổ quốc.",
+        "point": 4,
+        "plus": {
+          "PC1.5.C1": {
+            "code": "PC1.5.C1",
+            "description": "Đóng góp, ủng hộ chương trình ủng hộ cho các chiến sĩ đang thực hiện nhiệm vụ bảo vệ tổ quốc (có minh chứng).",
+            "point": 2
+          }
+        }
+      }
+    }
+  },
+  "nhan_ai": {
+    "name": "Nhân ái",
+    "criteria": {
+      "PC2.2": {
+        "code": "PC2.2",
+        "description": "Tôn trọng quyền và lợi ích hợp pháp của mọi người; đấu tranh với những hành vi xâm phạm quyền và lợi ích hợp pháp của tổ chức, cá nhân.",
+        "point": 3,
+        "plus": {
+          "PC2.2.C1": {
+            "code": "PC2.2.C1",
+            "description": "Nhặt được tiền, tài sản có giá trị nộp lại cho phòng Giám thị, GVCN để trả lại cho người làm mất.",
+            "point": 2
+          }
+        }
+      },
+      "PC2.3": {
+        "code": "PC2.3",
+        "description": "Chủ động, tích cực vận động người khác tham gia các hoạt động từ thiện và hoạt động phục vụ cộng đồng.",
+        "point": 4,
+        "plus": {
+          "PC2.3.C1": {
+            "code": "PC2.3.C1",
+            "description": "Quyên góp quần áo, sách vở cho HS vùng khó khăn vào đợt phát động của trường.",
+            "point": 2
+          },
+          "PC2.3.C2": {
+            "code": "PC2.3.C2",
+            "description": "Trực tiếp tham gia các hoạt động thiện nguyện có giấy xác nhận.",
+            "point": 2
+          }
+        }
+      },
+      "PC2.4": {
+        "code": "PC2.4",
+        "description": "Tôn trọng sự khác biệt về lựa chọn nghề nghiệp, hoàn cảnh sống, sự đa dạng văn hoá cá nhân.",
+        "point": 4,
+        "plus": {
+          "PC2.4.C1": {
+            "code": "PC2.4.C1",
+            "description": "Viết bài tuyên truyền, tiểu phẩm về bình đẳng trong các sự kiện của trường, địa phương (có minh chứng).",
+            "point": 2
+          },
+          "PC2.4.C2": {
+            "code": "PC2.4.C2",
+            "description": "Giúp đỡ bạn vượt khó, giúp đỡ HS hòa nhập trong quá trình học tập (có xác nhận của GVCN hoặc có xác nhận, đề xuất của Đoàn thể).",
+            "point": 2
+          },
+          "PC2.4.C3": {
+            "code": "PC2.4.C3",
+            "description": "Tổ chức sự kiện tuyên truyền phòng chống bạo lực học đường của trường.",
+            "point": 4
+          }
+        }
+      },
+      "PC2.5": {
+        "code": "PC2.5",
+        "description": "Có ý thức học hỏi các nền văn hoá trên thế giới.",
+        "point": 3,
+        "plus": {
+          "PC2.5.C1": {
+            "code": "PC2.5.C1",
+            "description": "Tham gia, tổ chức sự kiện giao lưu văn hoá quốc tế có giấy xác nhận của GV, tổ chức phụ trách.",
+            "point": 4
+          },
+          "PC2.5.C2": {
+            "code": "PC2.5.C2",
+            "description": "Thuyết trình giới thiệu văn hoá Việt Nam, nước ngoài trong các sự kiện, cuộc thi có giấy xác nhận của GV, tổ chức phụ trách.",
+            "point": 2
+          }
+        }
+      },
+      "PC2.6": {
+        "code": "PC2.6",
+        "description": "Cảm thông, độ lượng với những hành vi, thái độ có lỗi của người khác.",
+        "point": 3,
+        "plus": {
+          "PC2.6.C1": {
+            "code": "PC2.6.C1",
+            "description": "Tham gia tích cực CLB kỹ năng sống có giấy xác nhận của GV phụ trách.",
+            "point": 2
+          }
+        }
+      }
+    }
+  },
+  "cham_chi": {
+    "name": "Chăm chỉ",
+    "criteria": {
+      "PC3.2": {
+        "code": "PC3.2",
+        "description": "Tích cực tìm tòi và sáng tạo trong học tập; có ý chí vượt qua khó khăn để đạt kết quả tốt trong học tập.",
+        "point": 5,
+        "plus": {
+          "PC3.2.C1": {
+            "code": "PC3.2.C1",
+            "description": "Làm sản phẩm sáng tạo có tính ứng dụng cao trong học tập có xác nhận của GV bộ môn.",
+            "point": 4
+          }
+        }
+      },
+      "PC3.3": {
+        "code": "PC3.3",
+        "description": "Tích cực tham gia và vận động mọi người tham gia các công việc phục vụ cộng đồng.",
+        "point": 3,
+        "plus": {
+          "PC3.3.C1": {
+            "code": "PC3.3.C1",
+            "description": "Tham gia tích cực trong công việc lao động công ích của địa phương có giấy xác nhận của đơn vị phường,…",
+            "point": 1
+          }
+        }
+      },
+      "PC3.5": {
+        "code": "PC3.5",
+        "description": "Tích cực học tập, rèn luyện để chuẩn bị cho nghề nghiệp tương lai.",
+        "point": 4,
+        "plus": {
+          "PC3.5.C1": {
+            "code": "PC3.5.C1",
+            "description": "Tham gia hoặc tổ chức hội thảo, ngày hội nghề nghiệp có xác nhận của trường, địa phương.",
+            "point": "conditional",
+            "conditions": [
+              {
+                "type": "tham_gia",
+                "point": 2,
+                "description": "Tham gia"
+              },
+              {
+                "type": "to_chuc",
+                "point": 4,
+                "description": "Tổ chức"
+              }
+            ]
+          },
+          "PC3.5.C2": {
+            "code": "PC3.5.C2",
+            "description": "Đạt giải trong các kỳ thi cấp Quận, Thành phố, Quốc gia.",
+            "point": "conditional",
+            "conditions": [
+              {
+                "type": "quan",
+                "point": 2,
+                "description": "Cấp Quận"
+              },
+              {
+                "type": "thanh_pho",
+                "point": 4,
+                "description": "Cấp Thành phố"
+              },
+              {
+                "type": "quoc_gia",
+                "point": 6,
+                "description": "Cấp Quốc gia"
+              }
+            ]
+          },
+          "PC3.5.C3": {
+            "code": "PC3.5.C3",
+            "description": "Tham gia tích cực các CLB kỹ năng, học thuật,…của trường và có giấy chứng nhận",
+            "point": 2
+          }
+        }
+      }
+    }
+  },
+  "trung_thuc": {
+    "name": "Trung thực",
+    "criteria": {
+      "PC4.2": {
+        "code": "PC4.2",
+        "description": "Sẵn sàng đấu tranh bảo vệ lẽ phải, bảo vệ người tốt, điều tốt.",
+        "point": 6,
+        "plus": {
+          "PC4.2.C1": {
+            "code": "PC4.2.C1",
+            "description": "Tham gia hoặc tổ chức, viết bài,… trong sự kiện tuyên truyền gương người tốt, việc tốt có giấy xác nhận của giáo viên, trường, địa phương.",
+            "point": "conditional",
+            "conditions": [
+              {
+                "type": "tham_gia",
+                "point": 2,
+                "description": "Tham gia"
+              },
+              {
+                "type": "to_chuc",
+                "point": 4,
+                "description": "Tổ chức"
+              }
+            ]
+          }
+        }
+      },
+      "PC4.3": {
+        "code": "PC4.3",
+        "description": "Tự giác tham gia và vận động người khác tham gia phát hiện, đấu tranh với các hành vi thiếu trung thực trong học tập và trong cuộc sống, các hành vi vi phạm chuẩn mực đạo đức và quy định của pháp luật.",
+        "point": 6,
+        "plus": {
+          "PC4.3.C1": {
+            "code": "PC4.3.C1",
+            "description": "Phát hiện và báo cáo kịp thời với nhà trường các vụ mâu thuẫn có thể dẫn đến đánh nhau; hút thuốc lá, gian dối, vi phạm nội quy của nhà trường …(nhà trường sẽ điều tra, xác minh và xử lý).",
+            "point": 2
+          }
+        }
+      }
+    }
+  },
+  "trach_nhiem": {
+    "name": "Trách nhiệm",
+    "criteria": {
+      "PC5.1": {
+        "code": "PC5.1",
+        "description": "Tích cực, tự giác và nghiêm túc rèn luyện, tu dưỡng đạo đức của bản thân.",
+        "point": 1,
+        "plus": {
+          "PC5.1.C1": {
+            "code": "PC5.1.C1",
+            "description": "Tự nguyện đăng ký tham gia và chấp hành nghiêm chỉnh các buổi hướng nghiệp, đồng diễn, biểu diễn văn nghệ, Hội trại…ngoài nhà trường",
+            "point": 2
+          }
+        }
+      },
+      "PC5.2": {
+        "code": "PC5.2",
+        "description": "Có ý thức sử dụng tiền hợp lí khi ăn uống, mua sắm đồ dùng học tập, sinh hoạt.",
+        "point": 2,
+        "plus": {
+          "PC5.2.C1": {
+            "code": "PC5.2.C1",
+            "description": "Tham gia hoặc tổ chức sự kiện về tiết kiệm, cách quản lí chi tiêu có giấy xác nhận của GV, đơn vị phụ trách.",
+            "point": "conditional",
+            "conditions": [
+              {
+                "type": "tham_gia",
+                "point": 2,
+                "description": "Tham gia"
+              },
+              {
+                "type": "to_chuc",
+                "point": 4,
+                "description": "Tổ chức"
+              }
+            ]
+          }
+        }
+      },
+      "PC5.4": {
+        "code": "PC5.4",
+        "description": "Có ý thức làm tròn bổn phận với người thân và gia đình.",
+        "point": 3,
+        "plus": {
+          "PC5.4.C1": {
+            "code": "PC5.4.C1",
+            "description": "Tham gia hoặc tổ chức các hoạt động về bổn phận của con cháu với người thân và gia đình có giấy xác nhận của GV, đơn vị phụ trách.",
+            "point": "conditional",
+            "conditions": [
+              {
+                "type": "tham_gia",
+                "point": 2,
+                "description": "Tham gia"
+              },
+              {
+                "type": "to_chuc",
+                "point": 4,
+                "description": "Tổ chức"
+              }
+            ]
+          }
+        }
+      },
+      "PC5.6": {
+        "code": "PC5.6",
+        "description": "Tích cực tham gia và vận động người khác tham gia các hoạt động công ích.",
+        "point": 2,
+        "plus": {
+          "PC5.6.C1": {
+            "code": "PC5.6.C1",
+            "description": "Tổ chức các sự kiện về hoạt động công ích có giấy xác nhận của GV, đơn vị phụ trách.",
+            "point": 4
+          }
+        }
+      },
+      "PC5.7": {
+        "code": "PC5.7",
+        "description": "Tích cực tham gia và vận động người khác tham gia các hoạt động tuyên truyền pháp luật.",
+        "point": 2,
+        "plus": {
+          "PC5.7.C1": {
+            "code": "PC5.7.C1",
+            "description": "Tổ chức các sự kiện về hoạt động tuyên truyền pháp luật có giấy xác nhận của GV, đơn vị phụ trách.",
+            "point": 4
+          }
+        }
+      },
+      "PC5.10": {
+        "code": "PC5.10",
+        "description": "Chủ động, tích cực tham gia và vận động người khác tham gia các hoạt động tuyên truyền, chăm sóc, bảo vệ thiên nhiên, ứng phó với biến đổi khí hậu và phát triển bền vững.",
+        "point": 2,
+        "plus": {
+          "PC5.10.C1": {
+            "code": "PC5.10.C1",
+            "description": "Tổ chức các sự kiện về hoạt động tiết kiệm tài nguyên thiên nhiên, bảo vệ môi trường có giấy xác nhận của GV, đơn vị phụ trách.",
+            "point": 4
+          }
+        }
+      }
+    }
+  }
+}

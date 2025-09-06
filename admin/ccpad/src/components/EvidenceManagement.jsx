@@ -10,6 +10,7 @@ import {
   where,
   orderBy,
   getDoc,
+  onSnapshot,
 } from "firebase/firestore";
 import {
   FileText,
@@ -51,6 +52,37 @@ const EvidenceManagement = () => {
 
   useEffect(() => {
     fetchEvidence();
+
+    // Set up real-time listener for evidence
+    const unsubscribeEvidence = onSnapshot(
+      collection(db, "evidence"),
+      (snapshot) => {
+        const evidenceData = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+          submittedAt: doc.data().submittedAt?.toDate?.() || new Date(),
+          reviewedAt: doc.data().reviewedAt?.toDate?.() || null,
+        }));
+
+        // Kiểm tra và sửa dữ liệu cũ nếu cần
+        const cleanedEvidenceData = evidenceData.map((evidence) => {
+          if (!evidence.uid && evidence.studentId) {
+            evidence.uid = evidence.studentId;
+          }
+          return evidence;
+        });
+
+        setEvidenceList(cleanedEvidenceData);
+        fetchUserDetailsForEvidence(cleanedEvidenceData);
+      },
+      (error) => {
+        console.error("Error listening to evidence:", error);
+      }
+    );
+
+    return () => {
+      unsubscribeEvidence();
+    };
   }, []);
 
   const fetchEvidence = async () => {
@@ -161,6 +193,10 @@ const EvidenceManagement = () => {
       setPreviewType("image");
     } else if (file.type.includes("pdf")) {
       setPreviewType("pdf");
+    } else if (file.type.includes("text")) {
+      setPreviewType("text");
+    } else if (file.type.includes("video")) {
+      setPreviewType("video");
     } else {
       setPreviewType("other");
     }
@@ -168,42 +204,71 @@ const EvidenceManagement = () => {
   };
 
   const handleApprove = async () => {
-    if (!selectedPoints || selectedPoints <= 0) {
+    const points = parseInt(selectedPoints);
+    if (!selectedPoints || isNaN(points) || points <= 0) {
       alert("Vui lòng chọn số điểm phù hợp");
       return;
     }
 
     setIsProcessing(true);
     try {
+      console.log("Approving evidence:", selectedEvidence.id);
+      console.log("Selected points:", points);
+
+      // Update evidence status
       await updateDoc(doc(db, "evidence", selectedEvidence.id), {
         status: "approved",
-        approvedPoints: parseInt(selectedPoints),
+        approvedPoints: points,
         reviewedAt: new Date(),
         reviewedBy: "Admin",
       });
 
-      const studentInfo = getStudentInfo(selectedEvidence);
+      console.log("Evidence updated successfully");
+
+      // Add points to student with improved logic
+      const studentId = selectedEvidence.uid || selectedEvidence.studentId;
+      if (!studentId) {
+        throw new Error("Không tìm thấy thông tin học sinh");
+      }
+
       const studentPointData = {
-        studentId: selectedEvidence.uid || selectedEvidence.studentId, // Sử dụng uid để tương thích với StudentPointsManagement
-        ruleId: selectedEvidence.ruleId,
-        ruleCode: selectedEvidence.ruleCode,
+        studentId: studentId,
+        ruleId: selectedEvidence.ruleId || "unknown",
+        ruleCode: selectedEvidence.ruleCode || "unknown",
         type: "reward",
-        points: parseInt(selectedPoints),
-        description: selectedEvidence.ruleDescription,
+        points: points,
+        description:
+          selectedEvidence.title ||
+          selectedEvidence.ruleDescription ||
+          "Minh chứng được duyệt",
         status: "approved",
         createdAt: new Date(),
         awardedAt: new Date(),
-        createdBy: "admin",
+        createdBy: "evidence_approval",
         evidenceId: selectedEvidence.id,
+        // Add additional metadata
+        category: selectedEvidence.category || "evidence",
+        categoryPoints: selectedEvidence.categoryPoints || points,
+        approvedPoints: points,
       };
 
+      console.log("Student point data:", studentPointData);
       await addDoc(collection(db, "studentPoints"), studentPointData);
+      console.log("Student points added successfully");
+
       await fetchEvidence();
       setIsReviewModalOpen(false);
       setSelectedEvidence(null);
+      setSelectedPoints("");
       alert("Đã duyệt minh chứng thành công!");
     } catch (error) {
-      alert("Có lỗi xảy ra khi duyệt minh chứng");
+      console.error("Error approving evidence:", error);
+      console.error("Error details:", {
+        message: error.message,
+        code: error.code,
+        stack: error.stack,
+      });
+      alert("Có lỗi xảy ra khi duyệt minh chứng: " + error.message);
     } finally {
       setIsProcessing(false);
     }
@@ -219,7 +284,7 @@ const EvidenceManagement = () => {
     try {
       await updateDoc(doc(db, "evidence", selectedEvidence.id), {
         status: "rejected",
-        rejectionReason: rejectionReason,
+        rejectionReason: rejectionReason.trim(),
         reviewedAt: new Date(),
         reviewedBy: "Admin",
       });
@@ -227,8 +292,10 @@ const EvidenceManagement = () => {
       await fetchEvidence();
       setIsReviewModalOpen(false);
       setSelectedEvidence(null);
+      setRejectionReason("");
       alert("Đã từ chối minh chứng!");
     } catch (error) {
+      console.error("Error rejecting evidence:", error);
       alert("Có lỗi xảy ra khi từ chối minh chứng");
     } finally {
       setIsProcessing(false);
@@ -379,7 +446,7 @@ const EvidenceManagement = () => {
   };
 
   return (
-    <div className="p-6 mt-20">
+    <div className="p-6 ">
       <div className="mb-6">
         <div className="flex justify-between items-start">
           <div>
@@ -538,9 +605,9 @@ const EvidenceManagement = () => {
                       <div>
                         <div
                           className="text-sm font-medium text-gray-900 truncate max-w-xs"
-                          title={evidence.title}
+                          title={evidence.ruleCode || evidence.title}
                         >
-                          {evidence.title}
+                          {evidence.ruleCode || evidence.title}
                         </div>
                         <div
                           className="text-sm text-gray-500 truncate max-w-xs"
@@ -551,7 +618,7 @@ const EvidenceManagement = () => {
                         <div className="flex items-center mt-1">
                           <Award className="w-3 h-3 text-yellow-500 mr-1" />
                           <span className="text-xs text-gray-500">
-                            +{evidence.categoryPoints} điểm
+                            Mặc định: +{evidence.categoryPoints} điểm
                           </span>
                         </div>
                       </div>
@@ -694,7 +761,8 @@ const EvidenceManagement = () => {
                             Tiêu đề
                           </label>
                           <p className="text-gray-900 mt-1 font-medium">
-                            {selectedEvidence.title}
+                            {selectedEvidence.ruleCode ||
+                              selectedEvidence.title}
                           </p>
                         </div>
                         <div>
@@ -707,7 +775,7 @@ const EvidenceManagement = () => {
                         </div>
                         <div>
                           <label className="text-sm font-medium text-gray-600">
-                            Điểm tối đa
+                            Điểm mặc định
                           </label>
                           <p className="text-green-600 font-bold text-lg mt-1">
                             +{selectedEvidence.categoryPoints} điểm
@@ -761,15 +829,13 @@ const EvidenceManagement = () => {
                                 </div>
                               </div>
                               <div className="flex space-x-1 ml-2">
-                                {file.type.includes("image") && (
-                                  <button
-                                    onClick={() => handlePreviewFile(file)}
-                                    className="p-1.5 bg-blue-100 text-blue-600 rounded hover:bg-blue-200 transition-colors"
-                                    title="Xem trước"
-                                  >
-                                    <Eye className="w-4 h-4" />
-                                  </button>
-                                )}
+                                <button
+                                  onClick={() => handlePreviewFile(file)}
+                                  className="p-1.5 bg-blue-100 text-blue-600 rounded hover:bg-blue-200 transition-colors"
+                                  title="Xem trước"
+                                >
+                                  <Eye className="w-4 h-4" />
+                                </button>
                                 <a
                                   href={file.url}
                                   target="_blank"
@@ -846,14 +912,32 @@ const EvidenceManagement = () => {
                   <img
                     src={previewFile.url}
                     alt={previewFile.name}
-                    className="max-w-full max-h-[70vh] object-contain rounded-lg"
+                    className="max-w-full max-h-[70vh] object-contain rounded-lg shadow-lg"
                   />
                 </div>
               ) : previewType === "pdf" ? (
                 <div className="h-[70vh]">
                   <iframe
                     src={previewFile.url}
-                    className="w-full h-full border-0 rounded-lg"
+                    className="w-full h-full border-0 rounded-lg shadow-lg"
+                    title={previewFile.name}
+                  />
+                </div>
+              ) : previewType === "video" ? (
+                <div className="flex justify-center">
+                  <video
+                    src={previewFile.url}
+                    controls
+                    className="max-w-full max-h-[70vh] rounded-lg shadow-lg"
+                  >
+                    Trình duyệt của bạn không hỗ trợ video.
+                  </video>
+                </div>
+              ) : previewType === "text" ? (
+                <div className="h-[70vh] overflow-auto">
+                  <iframe
+                    src={previewFile.url}
+                    className="w-full h-full border-0 rounded-lg shadow-lg"
                     title={previewFile.name}
                   />
                 </div>
@@ -863,15 +947,24 @@ const EvidenceManagement = () => {
                   <p className="text-gray-600 mb-4">
                     Không thể xem trước file này
                   </p>
-                  <a
-                    href={previewFile.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-                  >
-                    <Download className="w-4 h-4 mr-2" />
-                    Tải xuống để xem
-                  </a>
+                  <div className="space-y-2">
+                    <p className="text-sm text-gray-500">
+                      Loại file: {previewFile.type}
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      Kích thước: {(previewFile.size / 1024 / 1024).toFixed(2)}{" "}
+                      MB
+                    </p>
+                    <a
+                      href={previewFile.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                    >
+                      <Download className="w-4 h-4 mr-2" />
+                      Tải xuống để xem
+                    </a>
+                  </div>
                 </div>
               )}
             </div>
@@ -922,7 +1015,7 @@ const EvidenceManagement = () => {
                           Tiêu đề
                         </label>
                         <p className="text-gray-900 mt-1 font-medium">
-                          {selectedEvidence.title}
+                          {selectedEvidence.ruleCode || selectedEvidence.title}
                         </p>
                       </div>
                       <div>
@@ -935,12 +1028,40 @@ const EvidenceManagement = () => {
                       </div>
                       <div>
                         <label className="text-sm font-medium text-gray-600">
-                          Điểm tối đa
+                          Điểm mặc định
                         </label>
                         <p className="text-green-600 font-bold text-lg mt-1">
                           +{selectedEvidence.categoryPoints} điểm
                         </p>
                       </div>
+                      {selectedEvidence.note && (
+                        <div>
+                          <label className="text-sm font-medium text-gray-600">
+                            Ghi chú của học sinh
+                          </label>
+                          <div className="mt-1 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                            <p className="text-gray-900 text-sm">
+                              {selectedEvidence.note}
+                            </p>
+                          </div>
+                        </div>
+                      )}
+                      {selectedEvidence.status === "rejected" &&
+                        selectedEvidence.rejectionReason && (
+                          <div>
+                            <label className="text-sm font-medium text-gray-600">
+                              Lý do từ chối
+                            </label>
+                            <div className="mt-1 p-3 bg-red-50 border border-red-200 rounded-lg">
+                              <div className="flex items-start">
+                                <AlertCircle className="w-4 h-4 text-red-500 mr-2 mt-0.5 flex-shrink-0" />
+                                <p className="text-red-800 text-sm">
+                                  {selectedEvidence.rejectionReason}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        )}
                     </div>
                   </div>
                 </div>
@@ -955,14 +1076,13 @@ const EvidenceManagement = () => {
                     <div className="space-y-4">
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Số điểm cấp (tối đa: {selectedEvidence.categoryPoints}
-                          )
+                          Số điểm cấp (mặc định:{" "}
+                          {selectedEvidence.categoryPoints}, có thể điều chỉnh)
                         </label>
                         <div className="relative">
                           <input
                             type="number"
                             min="0"
-                            max={selectedEvidence.categoryPoints}
                             value={selectedPoints}
                             onChange={(e) => setSelectedPoints(e.target.value)}
                             className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-lg font-medium"

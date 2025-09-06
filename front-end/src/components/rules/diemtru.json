@@ -1,0 +1,645 @@
+{
+  "yeu_nuoc": {
+    "name": "Yêu nước",
+    "criteria": {
+      "PC1.1": {
+        "code": "PC1.1",
+        "description": "Tích cực, chủ động vận động người khác tham gia các hoạt động bảo vệ thiên nhiên.",
+        "point": 4,
+        "minus": {
+          "PC1.1.B1": {
+            "code": "PC1.1.B1",
+            "description": "Bỏ rác không đúng nơi, phân loại rác không đúng quy định.",
+            "point": -1
+          },
+          "PC1.1.B2": {
+            "code": "PC1.1.B2",
+            "description": "Bẻ cành, phá hoại cây xanh trong trường.",
+            "point": -1
+          }
+        }
+      },
+      "PC1.2": {
+        "code": "PC1.2",
+        "description": "Tự giác thực hiện và vận động người khác thực hiện các quy định của pháp luật, góp phần bảo vệ và xây dựng Nhà nước xã hội chủ nghĩa Việt Nam.",
+        "point": 4,
+        "minus": {
+          "PC1.2.B1": {
+            "code": "PC1.2.B1",
+            "description": "Vi phạm luật An toàn giao thông, có thông báo của Sở GD, công an.",
+            "point": -55
+          },
+          "PC1.2.B2": {
+            "code": "PC1.2.B2",
+            "description": "Mang hung khí vào trường.",
+            "point": -35
+          },
+          "PC1.2.B3": {
+            "code": "PC1.2.B3",
+            "description": "Vi phạm luật an ninh mạng.",
+            "point": -55
+          },
+          "PC1.2.B4": {
+            "code": "PC1.2.B4",
+            "description": "Mua bán, tàng trữ, lôi kéo người khác sử dụng và trực tiếp sử dụng các loại thuốc lá, thuốc lá điện tử.",
+            "point": -55
+          },
+          "PC1.2.B5": {
+            "code": "PC1.2.B5",
+            "description": "Mang, tổ chức, tham gia đánh bạc trái phép (bao gồm cả đánh bài ăn tiền) trong trường, lớp dưới mọi hình thức.",
+            "point": -55
+          },
+          "PC1.2.B6": {
+            "code": "PC1.2.B6",
+            "description": "Tụ tập, lôi kéo tham gia hoạt động trái pháp luật khác.",
+            "point": -55
+          }
+        }
+      },
+      "PC1.3": {
+        "code": "PC1.3",
+        "description": "Chủ động, tích cực tham gia và vận động người khác tham gia các hoạt động bảo vệ, phát huy giá trị các di sản văn hoá.",
+        "point": 4,
+        "minus": {
+          "PC1.3.B1": {
+            "code": "PC1.3.B1",
+            "description": "Bôi bẩn, vẽ bậy lên di tích.",
+            "point": -10
+          },
+          "PC1.3.B2": {
+            "code": "PC1.3.B2",
+            "description": "Thiếu nghiêm túc trong các hoạt động kỷ niệm.",
+            "point": -4
+          }
+        }
+      },
+      "PC1.4": {
+        "code": "PC1.4",
+        "description": "Đấu tranh với các âm mưu, hành động xâm phạm lãnh thổ, biên giới quốc gia, các vùng biển thuộc chủ quyền và quyền chủ quyền của quốc gia bằng thái độ và việc làm phù hợp với lứa tuổi, với quy định của pháp luật.",
+        "point": 4,
+        "minus": {
+          "PC1.4.B1": {
+            "code": "PC1.4.B1",
+            "description": "Phát ngôn sai lệch về chủ quyền; Tuyên truyền tư tưởng trái pháp luật.",
+            "point": -55
+          }
+        }
+      },
+      "PC1.5": {
+        "code": "PC1.5",
+        "description": "Sẵn sàng thực hiện nghĩa vụ bảo vệ Tổ quốc.",
+        "point": 4,
+        "minus": {
+          "PC1.5.B1": {
+            "code": "PC1.5.B1",
+            "description": "Có hành vi coi thường người lính, người thực hiện nhiệm vụ bảo vệ tổ quốc.",
+            "point": -20
+          }
+        }
+      }
+    }
+  },
+  "nhan_ai": {
+    "name": "Nhân ái",
+    "criteria": {
+      "PC2.1": {
+        "code": "PC2.1",
+        "description": "Quan tâm đến mối quan hệ hài hoà với những người khác.",
+        "point": 3,
+        "minus": {
+          "PC2.1.B1": {
+            "code": "PC2.1.B1",
+            "description": "Nói tục, chửi thề.",
+            "point": -4
+          },
+          "PC2.1.B2": {
+            "code": "PC2.1.B2",
+            "description": "Tẩy chay, cô lập, bắt nạt bạn bè.",
+            "point": -4
+          },
+          "PC2.1.B3": {
+            "code": "PC2.1.B3",
+            "description": "Dung túng hành vi bắt nạt.",
+            "point": -4
+          }
+        }
+      },
+      "PC2.2": {
+        "code": "PC2.2",
+        "description": "Tôn trọng quyền và lợi ích hợp pháp của mọi người; đấu tranh với những hành vi xâm phạm quyền và lợi ích hợp pháp của tổ chức, cá nhân.",
+        "point": 3,
+        "minus": {
+          "PC2.2.B1": {
+            "code": "PC2.2.B1",
+            "description": "Lấy cắp, sử dụng đồ của người khác mà không xin phép.",
+            "point": -10
+          }
+        }
+      },
+      "PC2.3": {
+        "code": "PC2.3",
+        "description": "Chủ động, tích cực vận động người khác tham gia các hoạt động từ thiện và hoạt động phục vụ cộng đồng.",
+        "point": 4,
+        "minus": {
+          "PC2.3.B1": {
+            "code": "PC2.3.B1",
+            "description": "Tỏ thái độ coi thường hoạt động thiện nguyện.",
+            "point": -4
+          }
+        }
+      },
+      "PC2.4": {
+        "code": "PC2.4",
+        "description": "Tôn trọng sự khác biệt về lựa chọn nghề nghiệp, hoàn cảnh sống, sự đa dạng văn hoá cá nhân.",
+        "point": 4,
+        "minus": {
+          "PC2.4.B1": {
+            "code": "PC2.4.B1",
+            "description": "Chế giễu, phân biệt bạn nghèo/khuyết tật.",
+            "point": -4
+          },
+          "PC2.4.B2": {
+            "code": "PC2.4.B2",
+            "description": "Kỳ thị giới tính, tôn giáo.",
+            "point": -4
+          },
+          "PC2.4.B3": {
+            "code": "PC2.4.B3",
+            "description": "Miệt thị lựa chọn nghề nghiệp của cha mẹ, gia đình bạn bè.",
+            "point": -4
+          }
+        }
+      },
+      "PC2.5": {
+        "code": "PC2.5",
+        "description": "Có ý thức học hỏi các nền văn hoá trên thế giới.",
+        "point": 3,
+        "minus": {
+          "PC2.5.B1": {
+            "code": "PC2.5.B1",
+            "description": "Chế giễu, xuyên tạc, tuyên truyền thông tin sai lệch về văn hoá các nước trên thế giới.",
+            "point": -35
+          },
+          "PC2.5.B2": {
+            "code": "PC2.5.B2",
+            "description": "Tỏ thái độ thiếu tôn trọng các sự kiện giao lưu quốc tế.",
+            "point": -10
+          }
+        }
+      },
+      "PC2.6": {
+        "code": "PC2.6",
+        "description": "Cảm thông, độ lượng với những hành vi, thái độ có lỗi của người khác.",
+        "point": 3,
+        "minus": {
+          "PC2.6.B1": {
+            "code": "PC2.6.B1",
+            "description": "Cố tình hạ thấp, xúc phạm người mắc lỗi.",
+            "point": -4
+          },
+          "PC2.6.B2": {
+            "code": "PC2.6.B2",
+            "description": "Coi thường lời xin lỗi.",
+            "point": -2
+          },
+          "PC2.6.B3": {
+            "code": "PC2.6.B3",
+            "description": "Không hợp tác, né tránh người đã sửa sai.",
+            "point": -2
+          }
+        }
+      }
+    }
+  },
+  "cham_chi": {
+    "name": "Chăm chỉ",
+    "criteria": {
+      "PC3.1": {
+        "code": "PC3.1",
+        "description": "Có ý thức đánh giá điểm mạnh, điểm yếu của bản thân, thuận lợi, khó khăn trong học tập để xây dựng kế hoạch học tập.",
+        "point": 5,
+        "minus": {
+          "PC3.1.B1": {
+            "code": "PC3.1.B1",
+            "description": "Không tự giác học tập, phụ thuộc vào bạn bè.",
+            "point": -2
+          }
+        }
+      },
+      "PC3.2": {
+        "code": "PC3.2",
+        "description": "Tích cực tìm tòi và sáng tạo trong học tập; có ý chí vượt qua khó khăn để đạt kết quả tốt trong học tập.",
+        "point": 5,
+        "minus": {
+          "PC3.2.B1": {
+            "code": "PC3.2.B1",
+            "description": "Sao chép bài bạn.",
+            "point": -2
+          }
+        }
+      },
+      "PC3.3": {
+        "code": "PC3.3",
+        "description": "Tích cực tham gia và vận động mọi người tham gia các công việc phục vụ cộng đồng.",
+        "point": 3,
+        "minus": {
+          "PC3.3.B1": {
+            "code": "PC3.3.B1",
+            "description": "Né tránh, không tham gia lao động tập thể.",
+            "point": -2
+          },
+          "PC3.3.B2": {
+            "code": "PC3.3.B2",
+            "description": "Không trực lớp, lau bảng, không tắt điện, không khóa cửa trước khi ra về (GVCN phân công HS trực trong sổ đầu bài).",
+            "point": -2
+          },
+          "PC3.3.B3": {
+            "code": "PC3.3.B3",
+            "description": "Làm vệ sinh lớp trễ, không sạch.",
+            "point": -2
+          }
+        }
+      },
+      "PC3.4": {
+        "code": "PC3.4",
+        "description": "Có ý chí vượt qua khó khăn để đạt kết quả tốt trong lao động.",
+        "point": 3,
+        "minus": {
+          "PC3.4.B1": {
+            "code": "PC3.4.B1",
+            "description": "Trốn tránh trách nhiệm.",
+            "point": -2
+          },
+          "PC3.4.B2": {
+            "code": "PC3.4.B2",
+            "description": "Gây mất đoàn kết khi làm việc chung.",
+            "point": -2
+          }
+        }
+      },
+      "PC3.5": {
+        "code": "PC3.5",
+        "description": "Tích cực học tập, rèn luyện để chuẩn bị cho nghề nghiệp tương lai.",
+        "point": 4,
+        "minus": {
+          "PC3.5.B1": {
+            "code": "PC3.5.B1",
+            "description": "Không thực hiện nhiệm vụ học tập được phân công; không làm bài tập khi GV giao bài; làm việc riêng trong giờ học, nói chuyện trong giờ học, để sách vở và đồ dùng cá nhân không gọn gàng.",
+            "point": -2
+          },
+          "PC3.5.B2": {
+            "code": "PC3.5.B2",
+            "description": "Ngủ trong giờ học.",
+            "point": "progressive",
+            "levels": [
+              { "level": 1, "point": -2 },
+              { "level": 2, "point": -4 },
+              { "level": 3, "point": -6 }
+            ]
+          },
+          "PC3.5.B3": {
+            "code": "PC3.5.B3",
+            "description": "Sử dụng điện thoại, máy nghe nhạc, thiết bị di động,... trong giờ học khi GV chưa cho phép.",
+            "point": -10
+          },
+          "PC3.5.B4": {
+            "code": "PC3.5.B4",
+            "description": "Trốn tiết học.",
+            "point": -25
+          },
+          "PC3.5.B5": {
+            "code": "PC3.5.B5",
+            "description": "Nghỉ học.",
+            "point": "conditional",
+            "conditions": [
+              { "type": "không phép", "point": -6 },
+              {
+                "type": "có phép",
+                "point": -1,
+                "exceptions": [
+                  "Gia đình có tang",
+                  "HS bệnh có giấy bệnh viện",
+                  "tham gia cuộc thi của trường và cấp ngành, Thành phố tổ chức"
+                ]
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "trung_thuc": {
+    "name": "Trung thực",
+    "criteria": {
+      "PC4.1": {
+        "code": "PC4.1",
+        "description": "Nhận thức và hành động theo lẽ phải.",
+        "point": 8,
+        "minus": {
+          "PC4.1.B1": {
+            "code": "PC4.1.B1",
+            "description": "Giả mạo chữ ký của phụ huynh để xin phép; tự ý nhờ người ngoài đi thay phụ huynh khi trường có thư mời; Đưa người lạ vào trường chơi khi chưa được cho phép.",
+            "point": -10
+          },
+          "PC4.1.B2": {
+            "code": "PC4.1.B2",
+            "description": "Lấy cắp tài sản của nhà trường, đồ của người khác; Mang tài sản của nhà trường ra khỏi khuôn viên nhà trường khi chưa được phép của người có thẩm quyền.",
+            "point": -55
+          }
+        }
+      },
+      "PC4.2": {
+        "code": "PC4.2",
+        "description": "Sẵn sàng đấu tranh bảo vệ lẽ phải, bảo vệ người tốt, điều tốt.",
+        "point": 6,
+        "minus": {
+          "PC4.2.B1": {
+            "code": "PC4.2.B1",
+            "description": "Bao che cho người vi phạm, có thái độ ứng xử không trung thực.",
+            "point": -2
+          },
+          "PC4.2.B2": {
+            "code": "PC4.2.B2",
+            "description": "Chế giễu, hạ thấp người làm việc tốt.",
+            "point": -2
+          }
+        }
+      },
+      "PC4.3": {
+        "code": "PC4.3",
+        "description": "Tự giác tham gia và vận động người khác tham gia phát hiện, đấu tranh với các hành vi thiếu trung thực trong học tập và trong cuộc sống, các hành vi vi phạm chuẩn mực đạo đức và quy định của pháp luật.",
+        "point": 6,
+        "minus": {
+          "PC4.3.B1": {
+            "code": "PC4.3.B1",
+            "description": "Vi phạm quay cóp, nhờ người khác làm hộ bài, gian lận trong kiểm tra tại lớp có ghi nhận trong sổ đầu bài, kiểm tra tập trung có biên bản xác nhận.",
+            "point": -55
+          },
+          "PC4.3.B2": {
+            "code": "PC4.3.B2",
+            "description": "Che giấu, bao che cho bạn gian lận trong kiểm tra, thi cử.",
+            "point": -35
+          }
+        }
+      }
+    }
+  },
+  "trach_nhiem": {
+    "name": "Trách nhiệm",
+    "criteria": {
+      "PC5.1": {
+        "code": "PC5.1",
+        "description": "Tích cực, tự giác và nghiêm túc rèn luyện, tu dưỡng đạo đức của bản thân.",
+        "point": 1,
+        "minus": {
+          "PC5.1.B1": {
+            "code": "PC5.1.B1",
+            "description": "Nói tục, chửi thề.",
+            "point": -6
+          },
+          "PC5.1.B2": {
+            "code": "PC5.1.B2",
+            "description": "Mặc đồng phục không đúng, không đúng ngày quy định.",
+            "point": -2
+          },
+          "PC5.1.B3": {
+            "code": "PC5.1.B3",
+            "description": "Học sinh nam bỏ áo ngoài quần, không cài nút áo; Học sinh nữ: xăn tay áo dài, không cài nút áo, quần đáy ngắn, lưng xệ, phản cảm, váy ngắn, trang phục không đúng quy định.",
+            "point": -2
+          },
+          "PC5.1.B4": {
+            "code": "PC5.1.B4",
+            "description": "Mang guốc, dép lê, dép không có quai hậu, giày cao gót.",
+            "point": -2
+          },
+          "PC5.1.B5": {
+            "code": "PC5.1.B5",
+            "description": "Học sinh nam: tóc tạo hình, nhuộm tóc, đeo bông tai, xăm hình; Học sinh nữ: nhuộm tóc, vuốt keo, sơn móng tay, móng chân, son môi, trang điểm, xăm hình.",
+            "point": -2
+          },
+          "PC5.1.B6": {
+            "code": "PC5.1.B6",
+            "description": "Đi học trễ, vào lớp sau giáo viên khi đã có hiệu lệnh vào lớp.",
+            "point": "progressive",
+            "levels": [
+              { "level": 1, "point": -2 },
+              { "level": 2, "point": -4 },
+              { "level": 3, "point": -6 }
+            ]
+          },
+          "PC5.1.B7": {
+            "code": "PC5.1.B7",
+            "description": "Sử dụng nước uống để rửa mặt, rửa tay,...",
+            "point": -6
+          },
+          "PC5.1.B8": {
+            "code": "PC5.1.B8",
+            "description": "Hộc bàn, dưới nền nhà chỗ ngồi HS có rác.",
+            "point": -1
+          },
+          "PC5.1.B9": {
+            "code": "PC5.1.B9",
+            "description": "Phá hoại tài sản của nhà trường, người khác.",
+            "point": -10
+          },
+          "PC5.1.B10": {
+            "code": "PC5.1.B10",
+            "description": "Ăn, uống, nhai kẹo cao su trong phòng học, trong giờ sinh hoạt tập thể dưới sân trường (nước lọc không trừ điểm).",
+            "point": -4
+          },
+          "PC5.1.B11": {
+            "code": "PC5.1.B11",
+            "description": "Viết, vẽ lên tường, bàn ghế...",
+            "point": -8
+          },
+          "PC5.1.B12": {
+            "code": "PC5.1.B12",
+            "description": "Không giữ vệ sinh chung trong nhà vệ sinh.",
+            "point": -6
+          },
+          "PC5.1.B13": {
+            "code": "PC5.1.B13",
+            "description": "Xếp hàng chậm, không nghiêm túc, mất trật tự khi tập trung ở sân trường.",
+            "point": -4
+          },
+          "PC5.1.B14": {
+            "code": "PC5.1.B14",
+            "description": "Ra ngoài khuôn viên trường trong giờ ra chơi, đến khu vực cấm HS.",
+            "point": -25
+          },
+          "PC5.1.B15": {
+            "code": "PC5.1.B15",
+            "description": "Trèo tường xung quanh trường.",
+            "point": -25
+          },
+          "PC5.1.B16": {
+            "code": "PC5.1.B16",
+            "description": "Ra khỏi lớp, làm mất trật tự khi chuyển giao hai tiết.",
+            "point": -4
+          },
+          "PC5.1.B17": {
+            "code": "PC5.1.B17",
+            "description": "Ngồi sai sơ đồ lớp.",
+            "point": -2
+          },
+          "PC5.1.B18": {
+            "code": "PC5.1.B18",
+            "description": "Mang, rủ rê sử dụng và trực tiếp sử dụng rượu, bia, chất kích thích,... trong trường.",
+            "point": -55
+          },
+          "PC5.1.B19": {
+            "code": "PC5.1.B19",
+            "description": "Giờ chơi tụ tập gây mất trật tự: cổ vũ, đứng xem học sinh đánh nhau, gây tranh cãi, to tiếng...).",
+            "point": -4
+          },
+          "PC5.1.B20": {
+            "code": "PC5.1.B20",
+            "description": "Có hành vi thân mật nam nữ trong trường, có hành vi phản cảm trong trường.",
+            "point": -10
+          },
+          "PC5.1.B21": {
+            "code": "PC5.1.B21",
+            "description": "Vô lễ, coi thường đối với CB, GV, NV, xúc phạm người khác.",
+            "point": -55
+          },
+          "PC5.1.B22": {
+            "code": "PC5.1.B22",
+            "description": "Đưa người lạ vào trường với mục đích giải quyết mâu thuẫn, đe dọa, đánh nhau...",
+            "point": -55
+          },
+          "PC5.1.B23": {
+            "code": "PC5.1.B23",
+            "description": "Gây gổ, đe doạ người khác, trực tiếp tham gia đánh nhau.",
+            "point": "conditional",
+            "conditions": [
+              {
+                "type": "Mức độ mâu thuẫn đánh nhau trong trường",
+                "point": -35
+              },
+              {
+                "type": "Mức độ mâu thuẫn đánh nhau có vi phạm pháp luật, có hung khí, gây thương tích nặng, có sự tham gia của người ngoài trường",
+                "point": -55
+              }
+            ]
+          },
+          "PC5.1.B24": {
+            "code": "PC5.1.B24",
+            "description": "Kích động, gây mâu thuẫn để người khác đánh nhau.",
+            "point": -10
+          }
+        }
+      },
+      "PC5.2": {
+        "code": "PC5.2",
+        "description": "Có ý thức sử dụng tiền hợp lí khi ăn uống, mua sắm đồ dùng học tập, sinh hoạt.",
+        "point": 2,
+        "minus": {
+          "PC5.2.B1": {
+            "code": "PC5.2.B1",
+            "description": "Dùng tiền cá nhân, tiền chung của lớp vào mục đích không chính đáng, có ảnh hướng đến trường, lớp,...",
+            "point": -20
+          }
+        }
+      },
+      "PC5.3": {
+        "code": "PC5.3",
+        "description": "Sẵn sàng chịu trách nhiệm về những lời nói và hành động của bản thân.",
+        "point": 2,
+        "minus": {
+          "PC5.3.B1": {
+            "code": "PC5.3.B1",
+            "description": "Chối bỏ trách nhiệm, không thừa nhận lỗi sai.",
+            "point": -2
+          },
+          "PC5.3.B2": {
+            "code": "PC5.3.B2",
+            "description": "Đổ lỗi cho bạn bè.",
+            "point": -2
+          }
+        }
+      },
+      "PC5.4": {
+        "code": "PC5.4",
+        "description": "Có ý thức làm tròn bổn phận với người thân và gia đình.",
+        "point": 3,
+        "minus": {
+          "PC5.4.B1": {
+            "code": "PC5.4.B1",
+            "description": "Vô lễ với cha mẹ, người lớn,... tại trường.",
+            "point": -35
+          },
+          "PC5.4.B2": {
+            "code": "PC5.4.B2",
+            "description": "Bỏ nhà đi không xin phép, tự gây tổn hại đến bản thân,... làm ảnh hưởng đến gia đình và nhà trường.",
+            "point": -35
+          }
+        }
+      },
+      "PC5.6": {
+        "code": "PC5.6",
+        "description": "Tích cực tham gia và vận động người khác tham gia các hoạt động công ích.",
+        "point": 2,
+        "minus": {
+          "PC5.6.B1": {
+            "code": "PC5.6.B1",
+            "description": "Vắng các buổi lễ do nhà trường tổ chức tập trung; vắng lao động, trực Trường khi được phân công.",
+            "point": "conditional",
+            "conditions": [
+              {
+                "type": "khong_phep",
+                "point": -2,
+                "description": "Không phép"
+              },
+              {
+                "type": "co_phep",
+                "point": -1,
+                "description": "Có phép"
+              },
+              {
+                "type": "khong_tru_diem",
+                "point": 0,
+                "description": "Không trừ điểm khi vắng có phép (có minh chứng): Gia đình có tang, HS bệnh có giấy bệnh viện, tham gia cuộc thi của trường và cấp ngành, Thành phố tổ chức"
+              }
+            ]
+          }
+        }
+      },
+      "PC5.7": {
+        "code": "PC5.7",
+        "description": "Tích cực tham gia và vận động người khác tham gia các hoạt động tuyên truyền pháp luật.",
+        "point": 2,
+        "minus": {
+          "PC5.7.B1": {
+            "code": "PC5.7.B1",
+            "description": "Có thái độ coi thường khi người khác tham gia các hoạt động tuyên truyền pháp luật; lôi kéo người khác không tham gia các hoạt động tuyên truyền pháp luật.",
+            "point": -4
+          }
+        }
+      },
+      "PC5.8": {
+        "code": "PC5.8",
+        "description": "Đánh giá được hành vi chấp hành kỉ luật, pháp luật của bản thân và người khác; đấu tranh phê bình các hành vi vô kỉ luật, vi phạm pháp luật.",
+        "point": 1,
+        "minus": {
+          "PC5.8.B1": {
+            "code": "PC5.8.B1",
+            "description": "Cố tình lợi dụng việc phê bình để hạ bệ người khác, nói sai sự thật về người khác.",
+            "point": -4
+          }
+        }
+      },
+      "PC5.10": {
+        "code": "PC5.10",
+        "description": "Chủ động, tích cực tham gia và vận động người khác tham gia các hoạt động tuyên truyền, chăm sóc, bảo vệ thiên nhiên, ứng phó với biến đổi khí hậu và phát triển bền vững.",
+        "point": 2,
+        "minus": {
+          "PC5.10.B1": {
+            "code": "PC5.10.B1",
+            "description": "Có thái độ coi thường khi người khác tham gia các hoạt động bảo vệ môi trường; lôi kéo người khác không tham gia các hoạt động bảo vệ môi trường.",
+            "point": -4
+          }
+        }
+      }
+    }
+  }
+}

@@ -32,7 +32,7 @@ import {
 } from "firebase/firestore";
 import "./Events.css";
 import React from "react";
-import Header from "../Header/Header";
+import Header from "../Header/header";
 // Optional: toast can be wired later if available
 // import { showWarningToast } from "../Toast/Toast";
 

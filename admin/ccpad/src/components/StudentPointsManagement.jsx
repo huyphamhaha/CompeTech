@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { db } from "../firebase.js";
+import { useAuth } from "../contexts/AuthContext";
 import {
   collection,
   getDocs,
@@ -12,6 +13,7 @@ import {
   updateDoc,
   getDoc,
   deleteDoc,
+  onSnapshot,
 } from "firebase/firestore";
 import {
   Plus,
@@ -31,10 +33,16 @@ import {
   UserCheck,
   UserX,
   X,
+  User,
+  ChevronRight,
+  ChevronDown,
+  GraduationCap,
 } from "lucide-react";
+import rulesService from "../services/rulesService.jsx";
 
 function StudentPointsManagement() {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [students, setStudents] = useState([]);
   const [rules, setRules] = useState([]);
   const [studentPoints, setStudentPoints] = useState([]);
@@ -43,12 +51,16 @@ function StudentPointsManagement() {
   const [selectedClass, setSelectedClass] = useState("");
   const [selectedStudents, setSelectedStudents] = useState([]);
   const [showAddPointsModal, setShowAddPointsModal] = useState(false);
-  const [pointsType, setPointsType] = useState("penalty"); // penalty or reward
+  const [pointsType, setPointsType] = useState("penalty"); // penalty, reward
   const [selectedRules, setSelectedRules] = useState([]); // Thay đổi từ selectedRule thành selectedRules array
 
   const [showEditModal, setShowEditModal] = useState(false);
   const [editingPoint, setEditingPoint] = useState(null);
   const [approvedEvidence, setApprovedEvidence] = useState([]);
+  const [ruleSearchTerm, setRuleSearchTerm] = useState("");
+  const [availableRules, setAvailableRules] = useState([]);
+  const [progressiveLevels, setProgressiveLevels] = useState({});
+  const [conditionalSelections, setConditionalSelections] = useState({});
 
   const classOptions = [
     "Tất cả",
@@ -64,13 +76,295 @@ function StudentPointsManagement() {
   ];
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    if (user) {
+      // Tự động set lớp cho giáo viên
+      if (user.role === "teacher") {
+        setSelectedClass(user.class);
+      } else {
+        setSelectedClass("Tất cả");
+      }
+      fetchData();
+    }
+
+    // Set up real-time listeners
+    const unsubscribeStudents = onSnapshot(
+      collection(db, "users"),
+      (snapshot) => {
+        const studentsData = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+          createdAt: doc.data().createdAt?.toDate?.() || new Date(),
+        }));
+        setStudents(studentsData);
+      },
+      (error) => {
+        console.error("Error listening to students:", error);
+      }
+    );
+
+    const unsubscribePoints = onSnapshot(
+      collection(db, "studentPoints"),
+      (snapshot) => {
+        const pointsData = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+          createdAt: doc.data().createdAt?.toDate?.() || new Date(),
+          awardedAt: doc.data().awardedAt?.toDate?.() || null,
+        }));
+        setStudentPoints(pointsData);
+      },
+      (error) => {
+        console.error("Error listening to student points:", error);
+      }
+    );
+
+    // Add real-time listener for rules
+    const unsubscribeRules = onSnapshot(
+      collection(db, "rules"),
+      (snapshot) => {
+        // Refetch rules when Firebase rules change
+        fetchRules();
+      },
+      (error) => {
+        console.error("Error listening to rules:", error);
+      }
+    );
+
+    // Add real-time listener for rules_items
+    const unsubscribeRulesItems = onSnapshot(
+      collection(db, "rules_items"),
+      (snapshot) => {
+        // Refetch rules when Firebase rules change
+        fetchRules();
+      },
+      (error) => {
+        console.error("Error listening to rules_items:", error);
+      }
+    );
+
+    // Add real-time listener for criteria_info
+    const unsubscribeCriteria = onSnapshot(
+      collection(db, "criteria_info"),
+      (snapshot) => {
+        // Refetch rules when criteria change
+        fetchRules();
+      },
+      (error) => {
+        console.error("Error listening to criteria_info:", error);
+      }
+    );
+
+    // Cleanup listeners on unmount
+    return () => {
+      unsubscribeStudents();
+      unsubscribePoints();
+      unsubscribeRules();
+      unsubscribeRulesItems();
+      unsubscribeCriteria();
+    };
+  }, [user]);
 
   // Reset quy tắc khi chuyển loại điểm
   useEffect(() => {
     setSelectedRules([]); // Thay đổi từ setSelectedRule("") thành setSelectedRules([])
+    fetchRules(); // Refetch rules when pointsType changes
   }, [pointsType]);
+
+  // ========================================
+  // HELPER FUNCTIONS
+  // ========================================
+
+  // Helper function to sort rules by code (PC1.1, PC1.2, PC2.1, etc.)
+  const sortRulesByCode = (rules) => {
+    return rules.sort((a, b) => {
+      // Extract category and criterion numbers from code
+      const aMatch = a.code.match(/PC(\d+)\.(\d+)/);
+      const bMatch = b.code.match(/PC(\d+)\.(\d+)/);
+
+      if (!aMatch || !bMatch) return 0;
+
+      const aCategory = parseInt(aMatch[1]);
+      const aCriterion = parseInt(aMatch[2]);
+      const bCategory = parseInt(bMatch[1]);
+      const bCriterion = parseInt(bMatch[2]);
+
+      // First sort by category (PC1, PC2, PC3...)
+      if (aCategory !== bCategory) {
+        return aCategory - bCategory;
+      }
+
+      // Then sort by criterion within category (PC1.1, PC1.2, PC1.3...)
+      return aCriterion - bCriterion;
+    });
+  };
+
+  // Helper function to organize Firebase data like front-end
+  const organizeFirebaseData = (
+    firebaseRules,
+    firebaseCriteria,
+    targetType
+  ) => {
+    const organizedData = {};
+
+    // Helper function to map codes to categories (same as front-end)
+    const getCategoryFromCode = (code) => {
+      const codeToCategory = {
+        // Yêu nước
+        "PC1.1": "yeu_nuoc",
+        "PC1.2": "yeu_nuoc",
+        "PC1.3": "yeu_nuoc",
+        "PC1.4": "yeu_nuoc",
+        "PC1.5": "yeu_nuoc",
+        // Nhân ái
+        "PC2.1": "nhan_ai",
+        "PC2.2": "nhan_ai",
+        "PC2.3": "nhan_ai",
+        "PC2.4": "nhan_ai",
+        "PC2.5": "nhan_ai",
+        "PC2.6": "nhan_ai",
+        // Chăm chỉ
+        "PC3.1": "cham_chi",
+        "PC3.2": "cham_chi",
+        "PC3.3": "cham_chi",
+        "PC3.4": "cham_chi",
+        "PC3.5": "cham_chi",
+        // Trung thực
+        "PC4.1": "trung_thuc",
+        "PC4.2": "trung_thuc",
+        "PC4.3": "trung_thuc",
+        "PC4.4": "trung_thuc",
+        "PC4.5": "trung_thuc",
+        // Trách nhiệm
+        "PC5.1": "trach_nhiem",
+        "PC5.2": "trach_nhiem",
+        "PC5.3": "trach_nhiem",
+        "PC5.4": "trach_nhiem",
+        "PC5.5": "trach_nhiem",
+        "PC5.6": "trach_nhiem",
+        "PC5.7": "trach_nhiem",
+        "PC5.8": "trach_nhiem",
+        "PC5.9": "trach_nhiem",
+        "PC5.10": "trach_nhiem",
+      };
+      return codeToCategory[code] || "unknown";
+    };
+
+    const getCategoryName = (categoryKey) => {
+      const categoryNames = {
+        yeu_nuoc: "Yêu nước",
+        nhan_ai: "Nhân ái",
+        cham_chi: "Chăm chỉ",
+        trung_thuc: "Trung thực",
+        trach_nhiem: "Trách nhiệm",
+        unknown: "Khác",
+      };
+      return categoryNames[categoryKey] || "Khác";
+    };
+
+    // Create all criteria first (from criteriaRules)
+    firebaseCriteria.forEach((criterionInfo) => {
+      if (!criterionInfo.code || !criterionInfo.code.trim()) return;
+
+      const categoryKey = getCategoryFromCode(criterionInfo.code);
+
+      // Initialize category if not exists
+      if (!organizedData[categoryKey]) {
+        organizedData[categoryKey] = {
+          name: getCategoryName(categoryKey),
+          total_points: 0,
+          criteria: {},
+        };
+      }
+
+      // Create criterion
+      organizedData[categoryKey].criteria[criterionInfo.code] = {
+        code: criterionInfo.code,
+        description: criterionInfo.description || "Không có mô tả",
+        point: criterionInfo.point || 0,
+        [targetType === "plus" ? "plus" : "minus"]: {},
+      };
+    });
+
+    // Organize rules by type
+    const typeRules = firebaseRules.filter((rule) => rule.type === targetType);
+
+    typeRules.forEach((rule) => {
+      if (!rule.parentCode || !rule.parentCode.trim()) return;
+
+      const {
+        parentCode,
+        code,
+        description,
+        point,
+        pointType,
+        conditions,
+        levels,
+      } = rule;
+      const categoryKey = getCategoryFromCode(parentCode);
+
+      // Add rule to criterion
+      if (
+        organizedData[categoryKey] &&
+        organizedData[categoryKey].criteria[parentCode]
+      ) {
+        const ruleType = targetType === "plus" ? "plus" : "minus";
+        organizedData[categoryKey].criteria[parentCode][ruleType][code] = {
+          code,
+          description,
+          point: pointType === "fixed" ? point : pointType,
+          pointType,
+          conditions: conditions || [],
+          levels: levels || [],
+          id: rule.id,
+          isFirebaseRule: true,
+        };
+      }
+    });
+
+    return organizedData;
+  };
+
+  // Test function để kiểm tra Firebase
+  const testFirebaseConnection = async () => {
+    try {
+      console.log("🔍 Testing Firebase connection...");
+      const rules = await rulesService.getRulesFromFirebase();
+      console.log("📊 All Firebase rules:", rules);
+
+      // Kiểm tra từng rule
+      rules.forEach((rule, index) => {
+        console.log(`Rule ${index + 1}:`, {
+          id: rule.id,
+          code: rule.code,
+          type: rule.type,
+          point: rule.point,
+          description: rule.description,
+        });
+      });
+
+      // Kiểm tra xem có rules nào phù hợp với loại điểm hiện tại không
+      const matchingRules = rules.filter((rule) => rule.type === pointsType);
+      console.log(
+        `🔍 Rules matching current type (${pointsType}):`,
+        matchingRules
+      );
+
+      // Kiểm tra xem có rules nào có type khác không
+      const otherTypes = [...new Set(rules.map((rule) => rule.type))];
+      console.log("🔍 All rule types found:", otherTypes);
+
+      alert(
+        `Tìm thấy ${rules.length} rules trong Firebase\n${
+          matchingRules.length
+        } rules phù hợp với loại ${pointsType}\nCác loại rules: ${otherTypes.join(
+          ", "
+        )}\nKiểm tra console để xem chi tiết`
+      );
+    } catch (error) {
+      console.error("❌ Error testing Firebase:", error);
+      alert("Lỗi khi lấy dữ liệu từ Firebase: " + error.message);
+    }
+  };
 
   const fetchData = async () => {
     try {
@@ -91,7 +385,21 @@ function StudentPointsManagement() {
   const fetchStudents = async () => {
     try {
       const usersRef = collection(db, "users");
-      const q = query(usersRef, orderBy("createdAt", "desc"));
+
+      // Tạo query dựa trên quyền người dùng
+      let q;
+      if (user?.role === "teacher") {
+        // Giáo viên chỉ lấy học sinh của lớp mình
+        q = query(
+          usersRef,
+          where("className", "==", user.class),
+          orderBy("createdAt", "desc")
+        );
+      } else {
+        // Admin lấy tất cả học sinh
+        q = query(usersRef, orderBy("createdAt", "desc"));
+      }
+
       const querySnapshot = await getDocs(q);
 
       const studentsData = querySnapshot.docs.map((doc) => ({
@@ -108,19 +416,74 @@ function StudentPointsManagement() {
 
   const fetchRules = async () => {
     try {
-      const rulesRef = collection(db, "rules");
-      const q = query(rulesRef, orderBy("createdAt", "desc"));
-      const querySnapshot = await getDocs(q);
+      console.log("🔍 Fetching rules for type:", pointsType);
 
-      const rulesData = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-        createdAt: doc.data().createdAt?.toDate?.() || new Date(),
-      }));
+      // Get rules from Firebase
+      const firebaseRules = await rulesService.getRulesFromFirebase();
+      console.log("📊 Firebase rules:", firebaseRules);
 
-      setRules(rulesData);
+      // Get criteria from Firebase (like front-end does)
+      const firebaseCriteria = await rulesService.getCriteriaFromFirebase();
+      console.log("📋 Firebase criteria:", firebaseCriteria);
+
+      // Map admin types to Firebase types
+      const typeMapping = {
+        reward: "plus", // Admin reward = Firebase plus
+        penalty: "minus", // Admin penalty = Firebase minus
+      };
+
+      const firebaseType = typeMapping[pointsType];
+      console.log(`🔍 Looking for Firebase type: ${firebaseType}`);
+
+      // Organize Firebase data like front-end
+      const organizedData = organizeFirebaseData(
+        firebaseRules,
+        firebaseCriteria,
+        firebaseType
+      );
+      console.log("🏗️ Organized Firebase data:", organizedData);
+
+      // Convert organized data to flat rules array for admin UI
+      const transformedRules = [];
+
+      Object.entries(organizedData).forEach(([categoryKey, category]) => {
+        Object.entries(category.criteria).forEach(
+          ([criterionCode, criterion]) => {
+            const ruleType = firebaseType === "plus" ? "plus" : "minus";
+            const rules = criterion[ruleType] || {};
+
+            Object.entries(rules).forEach(([ruleCode, rule]) => {
+              transformedRules.push({
+                id: rule.id || ruleCode,
+                code: rule.code,
+                description: rule.description,
+                points: rule.point,
+                pointType: rule.pointType || "fixed",
+                levels: rule.levels || [],
+                conditions: rule.conditions || [],
+                type: pointsType,
+                category: category.name,
+                categoryKey: categoryKey,
+                criterion: criterionCode,
+                criterionDescription: criterion.description,
+                source: "firebase",
+                isFirebaseRule: true,
+              });
+            });
+          }
+        );
+      });
+
+      console.log("🔄 Transformed rules from Firebase:", transformedRules);
+
+      // Sort rules by code (PC1.1, PC1.2, PC2.1, etc.)
+      const sortedRules = sortRulesByCode(transformedRules);
+
+      console.log("🎯 Final Firebase rules:", sortedRules);
+      setRules(sortedRules);
+      setAvailableRules(sortedRules);
     } catch (error) {
-      // Silent error handling for production
+      console.error("❌ Error fetching rules:", error);
     }
   };
 
@@ -176,12 +539,39 @@ function StudentPointsManagement() {
     }
   };
 
+  // Filter rules based on search term
+  const filteredRules = availableRules.filter((rule) => {
+    const searchLower = ruleSearchTerm.toLowerCase();
+    return (
+      rule.description.toLowerCase().includes(searchLower) ||
+      rule.code.toLowerCase().includes(searchLower)
+    );
+  });
+
+  const handleRuleSearch = (searchTerm) => {
+    setRuleSearchTerm(searchTerm);
+  };
+
+  const handleProgressiveLevelChange = (ruleCode, level) => {
+    setProgressiveLevels((prev) => ({
+      ...prev,
+      [ruleCode]: level,
+    }));
+  };
+
+  const handleConditionalSelection = (ruleCode, conditionType) => {
+    setConditionalSelections((prev) => ({
+      ...prev,
+      [ruleCode]: conditionType,
+    }));
+  };
+
   const getStudentTotalPoints = (studentId) => {
     // Tính điểm từ studentPoints collection
     const studentPointsList = studentPoints.filter(
       (point) => point.studentId === studentId
     );
-    let total = 100; // Điểm mặc định
+    let total = 0; // Điểm ban đầu là 0
 
     studentPointsList.forEach((point) => {
       if (point.status === "approved") {
@@ -197,10 +587,20 @@ function StudentPointsManagement() {
     );
 
     approvedEvidenceList.forEach((evidence) => {
-      if (evidence.status === "approved" && evidence.approvedPoints) {
-        total += evidence.approvedPoints;
+      if (evidence.status === "approved") {
+        // Tính điểm từ behaviors - sử dụng dữ liệu từ Firebase
+        if (evidence.behaviors && Array.isArray(evidence.behaviors)) {
+          evidence.behaviors.forEach((ruleId) => {
+            // Tìm behavior trong availableRules (từ Firebase)
+            const behavior = availableRules.find((b) => b.code === ruleId);
+            if (behavior) {
+              total += behavior.points;
+            }
+          });
+        }
       }
     });
+
     return total;
   };
 
@@ -253,23 +653,7 @@ function StudentPointsManagement() {
     }
 
     if (selectedRules.length === 0) {
-      // Thay đổi từ !selectedRule thành selectedRules.length === 0
       alert("Vui lòng chọn ít nhất một quy tắc từ nội quy");
-      return;
-    }
-
-    // Kiểm tra tất cả quy tắc đã chọn có phù hợp với loại điểm không
-    const invalidRules = selectedRules.filter((ruleId) => {
-      const rule = rules.find((r) => r.id === ruleId);
-      return rule && rule.type !== pointsType;
-    });
-
-    if (invalidRules.length > 0) {
-      alert(
-        `Có ${invalidRules.length} quy tắc không phù hợp với loại điểm ${
-          pointsType === "penalty" ? "trừ" : "cộng"
-        }. Vui lòng kiểm tra lại.`
-      );
       return;
     }
 
@@ -279,21 +663,86 @@ function StudentPointsManagement() {
       // Tạo điểm cho từng học sinh với từng quy tắc đã chọn
       for (const studentId of selectedStudents) {
         for (const ruleId of selectedRules) {
-          const rule = rules.find((r) => r.id === ruleId);
-          if (rule) {
-            pointsData.push({
+          // Find the rule from available rules
+          const rule = availableRules.find((r) =>
+            pointsType === "behavior" ? r.code === ruleId : r.id === ruleId
+          );
+
+          if (!rule) continue;
+
+          let points = rule.points;
+          let level = 1;
+          let ruleType = "fixed";
+
+          // Handle progressive and conditional rules
+          if (rule.pointType === "progressive") {
+            ruleType = "progressive";
+            const selectedLevel = progressiveLevels[rule.code] || 1;
+            const result = await rulesService.applyRule(
               studentId,
-              ruleId: ruleId,
-              ruleCode: rule.code,
-              type: pointsType,
-              points: rule.points,
-              description: rule.description,
-              status: "approved",
-              createdAt: new Date(),
-              awardedAt: new Date(),
-              createdBy: "admin",
-            });
+              rule.code,
+              "progressive",
+              { level: selectedLevel }
+            );
+            if (result.success) {
+              points = result.points;
+              level = result.level;
+            }
+          } else if (rule.pointType === "conditional") {
+            ruleType = "conditional";
+            const selectedCondition =
+              conditionalSelections[rule.code] || "không phép";
+            const result = await rulesService.applyRule(
+              studentId,
+              rule.code,
+              "conditional",
+              {
+                conditionType: selectedCondition,
+              }
+            );
+            if (result.success) {
+              points = result.points;
+            }
           }
+
+          // Fix logic for penalty points - ensure negative values
+          if (pointsType === "penalty" && points > 0) {
+            points = -Math.abs(points);
+          }
+
+          // For behaviors, ensure they are not cumulative
+          if (pointsType === "behavior") {
+            // Check if student already has this behavior
+            const existingBehavior = studentPoints.find(
+              (point) =>
+                point.studentId === studentId &&
+                point.ruleCode === rule.code &&
+                point.type === "behavior" &&
+                point.status === "approved"
+            );
+
+            if (existingBehavior) {
+              alert(
+                `Học sinh đã có biểu hiện ${rule.code}. Biểu hiện không thể cộng dồn.`
+              );
+              continue;
+            }
+          }
+
+          pointsData.push({
+            studentId,
+            ruleId: ruleId,
+            ruleCode: rule.code,
+            type: pointsType,
+            points: points,
+            description: rule.description,
+            ruleType: ruleType,
+            level: level,
+            status: "approved",
+            createdAt: new Date(),
+            awardedAt: new Date(),
+            createdBy: "admin",
+          });
         }
       }
 
@@ -305,16 +754,20 @@ function StudentPointsManagement() {
       // Reset form
       setSelectedStudents([]);
       setShowAddPointsModal(false);
-      setSelectedRules([]); // Thay đổi từ setSelectedRule("") thành setSelectedRules([])
+      setSelectedRules([]);
+      setRuleSearchTerm("");
 
       // Refresh data
       fetchStudentPoints();
 
       // Thông báo thành công
       alert(
-        `Đã thêm điểm thành công cho ${selectedStudents.length} học sinh với ${selectedRules.length} quy tắc!`
+        `Đã thêm điểm thành công cho ${selectedStudents.length} học sinh với ${
+          selectedRules.length
+        } ${pointsType === "behavior" ? "biểu hiện" : "quy tắc"} từ Firebase!`
       );
     } catch (error) {
+      console.error("Error adding points:", error);
       alert("Có lỗi xảy ra khi thêm điểm");
     }
   };
@@ -370,7 +823,7 @@ function StudentPointsManagement() {
   const handleUpdatePoint = async () => {
     if (!editingPoint) return;
 
-    // Validation
+    // Enhanced validation
     if (!editingPoint.points || editingPoint.points === 0) {
       alert("Vui lòng nhập điểm hợp lệ");
       return;
@@ -378,6 +831,17 @@ function StudentPointsManagement() {
 
     if (!editingPoint.description || editingPoint.description.trim() === "") {
       alert("Vui lòng nhập mô tả");
+      return;
+    }
+
+    // Validate point type consistency
+    if (editingPoint.type === "penalty" && editingPoint.points > 0) {
+      alert("Điểm trừ phải là số âm");
+      return;
+    }
+
+    if (editingPoint.type === "reward" && editingPoint.points < 0) {
+      alert("Điểm cộng phải là số dương");
       return;
     }
 
@@ -412,8 +876,6 @@ function StudentPointsManagement() {
     return matchesSearch && matchesClass;
   });
 
-  const filteredRules = rules.filter((rule) => rule.type === pointsType);
-
   // Hàm để thêm/xóa quy tắc khỏi danh sách đã chọn
   const toggleRuleSelection = (ruleId) => {
     setSelectedRules((prev) => {
@@ -425,8 +887,147 @@ function StudentPointsManagement() {
     });
   };
 
+  // Helper function để sắp xếp categories theo thứ tự mong muốn
+  const getSortedCategories = (data) => {
+    const categoryOrder = [
+      "Yêu nước",
+      "Nhân ái",
+      "Chăm chỉ",
+      "Trung thực",
+      "Trách nhiệm",
+    ];
+    const sortedEntries = [];
+
+    categoryOrder.forEach((categoryName) => {
+      if (data[categoryName]) {
+        sortedEntries.push([categoryName, data[categoryName]]);
+      }
+    });
+
+    // Thêm các categories khác nếu có
+    Object.entries(data).forEach(([categoryName, category]) => {
+      if (!categoryOrder.includes(categoryName)) {
+        sortedEntries.push([categoryName, category]);
+      }
+    });
+
+    return sortedEntries;
+  };
+
+  // Helper function để sắp xếp criteria theo thứ tự tăng dần (PC1.1, PC1.2, PC1.3, ...)
+  const getSortedCriteria = (criteria) => {
+    if (!criteria || typeof criteria !== "object") {
+      return [];
+    }
+
+    return Object.entries(criteria).sort(([a], [b]) => {
+      // Sắp xếp theo thứ tự số học: PC1.1, PC1.2, PC1.10, PC2.1, PC2.2, ...
+      const aMatch = a.match(/PC(\d+)\.(\d+)/);
+      const bMatch = b.match(/PC(\d+)\.(\d+)/);
+
+      if (aMatch && bMatch) {
+        const aCategory = parseInt(aMatch[1]);
+        const aSub = parseInt(aMatch[2]);
+        const bCategory = parseInt(bMatch[1]);
+        const bSub = parseInt(bMatch[2]);
+
+        // So sánh category trước
+        if (aCategory !== bCategory) {
+          return aCategory - bCategory;
+        }
+        // Nếu cùng category thì so sánh sub
+        return aSub - bSub;
+      }
+
+      // Fallback về localeCompare nếu không match pattern
+      return a.localeCompare(b);
+    });
+  };
+
+  // Group rules by category and criterion
+  const getGroupedRules = () => {
+    const grouped = {};
+
+    filteredRules.forEach((rule) => {
+      const category = rule.category || "Khác";
+      const criterion = rule.criterion || "Khác";
+
+      if (!grouped[category]) {
+        grouped[category] = {};
+      }
+      if (!grouped[category][criterion]) {
+        grouped[category][criterion] = {
+          code: criterion,
+          description: rule.criterionDescription || "",
+          rules: [],
+        };
+      }
+      grouped[category][criterion].rules.push(rule);
+    });
+
+    // Sắp xếp rules trong mỗi criterion theo thứ tự
+    Object.values(grouped).forEach((category) => {
+      Object.values(category).forEach((criterion) => {
+        criterion.rules.sort((a, b) => {
+          // Sắp xếp theo thứ tự số học: PC1.1.A1, PC1.1.A2, PC1.1.A10, PC1.2.A1, ...
+          const aMatch = a.code.match(/PC(\d+)\.(\d+)\.([A-Z])(\d+)/);
+          const bMatch = b.code.match(/PC(\d+)\.(\d+)\.([A-Z])(\d+)/);
+
+          if (aMatch && bMatch) {
+            const aCategory = parseInt(aMatch[1]);
+            const aSub = parseInt(aMatch[2]);
+            const aType = aMatch[3];
+            const aItem = parseInt(aMatch[4]);
+            const bCategory = parseInt(bMatch[1]);
+            const bSub = parseInt(bMatch[2]);
+            const bType = bMatch[3];
+            const bItem = parseInt(bMatch[4]);
+
+            // So sánh category trước
+            if (aCategory !== bCategory) {
+              return aCategory - bCategory;
+            }
+            // Nếu cùng category thì so sánh sub
+            if (aSub !== bSub) {
+              return aSub - bSub;
+            }
+            // Nếu cùng sub thì so sánh type (A, B, C)
+            if (aType !== bType) {
+              return aType.localeCompare(bType);
+            }
+            // Nếu cùng type thì so sánh item number
+            return aItem - bItem;
+          }
+
+          // Fallback về localeCompare nếu không match pattern
+          return a.code.localeCompare(b.code);
+        });
+      });
+    });
+
+    return grouped;
+  };
+
+  const [collapsedCategories, setCollapsedCategories] = useState({});
+  const [collapsedCriteria, setCollapsedCriteria] = useState({});
+
+  const toggleCategory = (categoryName) => {
+    setCollapsedCategories((prev) => ({
+      ...prev,
+      [categoryName]: !prev[categoryName],
+    }));
+  };
+
+  const toggleCriterion = (categoryName, criterionCode) => {
+    const key = `${categoryName}-${criterionCode}`;
+    setCollapsedCriteria((prev) => ({
+      ...prev,
+      [key]: !prev[key],
+    }));
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50 p-6 mt-20">
+    <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-7xl mx-auto">
         <div className="bg-white rounded-lg shadow-sm border border-gray-200">
           {/* Header */}
@@ -437,10 +1038,14 @@ function StudentPointsManagement() {
                   Quản lý Điểm Học sinh
                 </h1>
                 <p className="text-gray-600 mt-1">
-                  Thêm điểm cộng/trừ cho học sinh
+                  Thêm điểm cộng/trừ cho học sinh - Real-time updates
                 </p>
               </div>
               <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2 text-sm text-green-600">
+                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                  <span>Live updates</span>
+                </div>
                 <button
                   onClick={fetchData}
                   className="px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center gap-2 transition-colors"
@@ -467,7 +1072,11 @@ function StudentPointsManagement() {
 
           {/* Filters */}
           <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div
+              className={`grid grid-cols-1 ${
+                user?.role === "admin" ? "md:grid-cols-3" : "md:grid-cols-2"
+              } gap-4`}
+            >
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Tìm kiếm
@@ -486,22 +1095,40 @@ function StudentPointsManagement() {
                   />
                 </div>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Lớp
-                </label>
-                <select
-                  value={selectedClass}
-                  onChange={(e) => setSelectedClass(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  {classOptions.map((option) => (
-                    <option key={option} value={option}>
-                      {option}
-                    </option>
-                  ))}
-                </select>
-              </div>
+
+              {/* Chỉ hiển thị dropdown lớp cho admin */}
+              {user?.role === "admin" && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Lớp
+                  </label>
+                  <select
+                    value={selectedClass}
+                    onChange={(e) => setSelectedClass(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    {classOptions.map((option) => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
+
+              {/* Hiển thị thông tin lớp cho giáo viên */}
+              {user?.role === "teacher" && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Lớp được phân công
+                  </label>
+                  <div className="px-3 py-2 border border-gray-300 rounded-md bg-gray-50 flex items-center">
+                    <GraduationCap className="w-4 h-4 text-gray-500 mr-2" />
+                    <span className="text-gray-700">{user.class}</span>
+                  </div>
+                </div>
+              )}
+
               <div className="flex items-end">
                 <button
                   onClick={() => setSelectedStudents([])}
@@ -563,14 +1190,36 @@ function StudentPointsManagement() {
                         <div className="text-right">
                           <div
                             className={`text-lg font-bold ${
-                              totalPoints >= 80
+                              totalPoints >= 85
                                 ? "text-green-600"
-                                : totalPoints >= 60
+                                : totalPoints >= 70
                                 ? "text-yellow-600"
+                                : totalPoints >= 50
+                                ? "text-orange-600"
                                 : "text-red-600"
                             }`}
                           >
                             {totalPoints} điểm
+                          </div>
+                          <div className="text-xs text-gray-500 mt-1">
+                            {(() => {
+                              const pointsHistory = getStudentPointsHistory(
+                                student.id
+                              );
+                              const reward = pointsHistory
+                                .filter((p) => p.type === "reward")
+                                .reduce((sum, p) => sum + p.points, 0);
+                              const penalty = pointsHistory
+                                .filter((p) => p.type === "penalty")
+                                .reduce(
+                                  (sum, p) => sum + Math.abs(p.points),
+                                  0
+                                );
+                              const behavior = pointsHistory
+                                .filter((p) => p.type === "behavior")
+                                .reduce((sum, p) => sum + p.points, 0);
+                              return `Cộng: ${reward} | Trừ: ${penalty} | Biểu hiện: ${behavior}`;
+                            })()}
                           </div>
                         </div>
                       </div>
@@ -597,7 +1246,7 @@ function StudentPointsManagement() {
         {/* Add Points Modal */}
         {showAddPointsModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg p-6 w-full max-w-6xl max-h-[90vh] overflow-y-auto">
+            <div className="bg-white rounded-lg p-6 w-full max-w-7xl max-h-[90vh] overflow-y-auto">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-xl font-bold">Thêm điểm cho học sinh</h2>
                 <button
@@ -659,7 +1308,7 @@ function StudentPointsManagement() {
                       className={`flex-1 py-2 px-4 rounded-md font-medium transition-colors ${
                         pointsType === "reward"
                           ? "bg-white text-green-600 shadow-sm"
-                          : "text-gray-900"
+                          : "text-gray-600 hover:text-gray-900"
                       }`}
                     >
                       <div className="flex items-center justify-center gap-2">
@@ -676,87 +1325,297 @@ function StudentPointsManagement() {
                     Chọn quy tắc từ nội quy đã tạo (có thể chọn nhiều)
                   </label>
 
+                  {/* Thông báo về rules mới từ Firebase */}
+                  {availableRules.some((rule) => rule.source === "firebase")}
+
+                  {/* Search Bar */}
+                  <div className="mb-4">
+                    <div className="relative">
+                      <Search
+                        className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                        size={20}
+                      />
+                      <input
+                        type="text"
+                        value={ruleSearchTerm}
+                        onChange={(e) => handleRuleSearch(e.target.value)}
+                        placeholder="Tìm kiếm quy tắc..."
+                        className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
+                    {ruleSearchTerm && (
+                      <p className="text-sm text-gray-500 mt-1">
+                        Tìm thấy {filteredRules.length} kết quả
+                      </p>
+                    )}
+                  </div>
+
                   {filteredRules.length === 0 ? (
                     <div className="p-4 bg-orange-50 border border-orange-200 rounded-lg text-center">
                       <p className="text-sm text-orange-800">
                         💡 Chưa có nội quy{" "}
                         {pointsType === "penalty" ? "điểm trừ" : "điểm cộng"}{" "}
-                        nào. Vui lòng tạo trong tab "Nội quy" trước.
+                        nào trong Firebase. Vui lòng tạo trong trang quản lý nội
+                        quy trước.
                       </p>
                     </div>
                   ) : (
-                    <div className="overflow-x-auto">
-                      <table className="w-full border-collapse border border-gray-300 bg-white rounded-lg overflow-hidden shadow-sm">
-                        <thead className="bg-gray-50">
-                          <tr>
-                            <th className="border border-gray-300 px-4 py-3 text-left text-sm font-semibold text-gray-700 bg-gray-100">
-                              Mô tả
-                            </th>
-                            <th className="border border-gray-300 px-3 py-3 text-center text-sm font-semibold text-gray-700 bg-gray-100">
-                              Mã quy tắc
-                            </th>
-                            <th className="border border-gray-300 px-3 py-3 text-center text-sm font-semibold text-gray-700 bg-gray-100">
-                              Điểm
-                            </th>
-                            <th className="border border-gray-300 px-3 py-3 text-center text-sm font-semibold text-gray-700 bg-gray-100">
-                              Chọn
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {filteredRules.map((rule, index) => {
-                            const isSelected = selectedRules.includes(rule.id);
-                            return (
-                              <tr
-                                key={rule.id}
-                                className={`hover:bg-gray-50 cursor-pointer ${
-                                  index % 2 === 0 ? "bg-white" : "bg-gray-50"
-                                } ${
-                                  isSelected ? "bg-blue-50 border-blue-200" : ""
-                                }`}
-                                onClick={() => toggleRuleSelection(rule.id)}
-                              >
-                                <td className="border border-gray-300 px-4 py-3 text-sm text-gray-800 align-top">
-                                  <div className="flex items-start gap-2">
-                                    <span className="text-red-500 font-medium text-xs">
-                                      {index + 1})
-                                    </span>
-                                    <span className="leading-relaxed">
-                                      {rule.description}
-                                    </span>
-                                  </div>
-                                </td>
-                                <td className="border border-gray-300 px-3 py-3 text-center text-sm text-gray-600 font-medium">
-                                  {rule.code}
-                                </td>
-                                <td className="border border-gray-300 px-3 py-3 text-center">
-                                  <span
-                                    className={`text-lg font-bold ${
-                                      rule.points > 0
-                                        ? "text-green-600"
-                                        : "text-red-600"
-                                    }`}
-                                  >
-                                    {rule.points > 0
-                                      ? `+${rule.points}`
-                                      : rule.points}
-                                  </span>
-                                </td>
-                                <td className="border border-gray-300 px-3 py-3 text-center">
-                                  <input
-                                    type="checkbox"
-                                    checked={isSelected}
-                                    onChange={() =>
-                                      toggleRuleSelection(rule.id)
-                                    }
-                                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500"
-                                  />
-                                </td>
-                              </tr>
-                            );
-                          })}
-                        </tbody>
-                      </table>
+                    <div className="space-y-4">
+                      {getSortedCategories(getGroupedRules()).map(
+                        ([categoryName, criteria]) => (
+                          <div
+                            key={categoryName}
+                            className="border border-gray-200 rounded-lg"
+                          >
+                            <div
+                              className="bg-gray-50 px-4 py-3 cursor-pointer hover:bg-gray-100"
+                              onClick={() => toggleCategory(categoryName)}
+                            >
+                              <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-3">
+                                  {collapsedCategories[categoryName] ? (
+                                    <ChevronRight size={20} />
+                                  ) : (
+                                    <ChevronDown size={20} />
+                                  )}
+                                  <h3 className="font-semibold text-gray-900">
+                                    {categoryName}
+                                  </h3>
+                                </div>
+                              </div>
+                            </div>
+
+                            {!collapsedCategories[categoryName] && (
+                              <div className="p-4 space-y-4">
+                                {getSortedCriteria(criteria).map(
+                                  ([criterionCode, criterion]) => (
+                                    <div
+                                      key={criterionCode}
+                                      className="border border-gray-200 rounded-lg"
+                                    >
+                                      <div
+                                        className={`px-4 py-3 ${
+                                          pointsType === "penalty"
+                                            ? "bg-red-50"
+                                            : "bg-green-50"
+                                        }`}
+                                      >
+                                        <div className="flex items-center justify-between">
+                                          <div className="flex items-center gap-3">
+                                            <button
+                                              onClick={() =>
+                                                toggleCriterion(
+                                                  categoryName,
+                                                  criterionCode
+                                                )
+                                              }
+                                              className="flex items-center gap-2"
+                                            >
+                                              {collapsedCriteria[
+                                                `${categoryName}-${criterionCode}`
+                                              ] ? (
+                                                <ChevronRight size={16} />
+                                              ) : (
+                                                <ChevronDown size={16} />
+                                              )}
+                                            </button>
+                                            <div>
+                                              <h4 className="font-medium text-gray-900">
+                                                {criterion.code}
+                                              </h4>
+                                              <p className="text-sm text-gray-600">
+                                                {criterion.description}
+                                              </p>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+
+                                      {!collapsedCriteria[
+                                        `${categoryName}-${criterionCode}`
+                                      ] && (
+                                        <div className="p-4">
+                                          {criterion.rules.map(
+                                            (rule, index) => {
+                                              const isSelected =
+                                                selectedRules.includes(rule.id);
+                                              return (
+                                                <div
+                                                  key={rule.id}
+                                                  className={`flex items-center justify-between py-3 border-b border-gray-100 last:border-b-0 cursor-pointer ${
+                                                    isSelected
+                                                      ? "bg-blue-50 border-blue-200"
+                                                      : "hover:bg-gray-50"
+                                                  }`}
+                                                  onClick={() =>
+                                                    toggleRuleSelection(rule.id)
+                                                  }
+                                                >
+                                                  <div className="flex-1">
+                                                    <div className="flex items-center gap-2 mb-1">
+                                                      <span className="text-sm font-medium text-gray-700">
+                                                        {rule.code}
+                                                      </span>
+                                                      <span
+                                                        className={`text-sm font-medium ${
+                                                          rule.points > 0
+                                                            ? "text-green-600"
+                                                            : "text-red-600"
+                                                        }`}
+                                                      >
+                                                        {rule.pointType ===
+                                                        "conditional"
+                                                          ? "Điều kiện"
+                                                          : rule.pointType ===
+                                                            "progressive"
+                                                          ? "Tiến triển"
+                                                          : rule.points > 0
+                                                          ? `+${rule.points} điểm`
+                                                          : `${rule.points} điểm`}
+                                                      </span>
+                                                    </div>
+                                                    <p className="text-sm text-gray-600">
+                                                      {rule.description}
+                                                    </p>
+                                                  </div>
+                                                  <div className="flex items-center gap-2">
+                                                    {rule.pointType ===
+                                                      "progressive" && (
+                                                      <select
+                                                        value={
+                                                          progressiveLevels[
+                                                            rule.code
+                                                          ] || 1
+                                                        }
+                                                        onChange={(e) =>
+                                                          handleProgressiveLevelChange(
+                                                            rule.code,
+                                                            parseInt(
+                                                              e.target.value
+                                                            )
+                                                          )
+                                                        }
+                                                        className="px-2 py-1 text-xs border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                                        onClick={(e) =>
+                                                          e.stopPropagation()
+                                                        }
+                                                      >
+                                                        {rule.levels ? (
+                                                          rule.levels.map(
+                                                            (level) => (
+                                                              <option
+                                                                key={
+                                                                  level.level
+                                                                }
+                                                                value={
+                                                                  level.level
+                                                                }
+                                                              >
+                                                                L{level.level}:{" "}
+                                                                {level.point}{" "}
+                                                                điểm
+                                                              </option>
+                                                            )
+                                                          )
+                                                        ) : (
+                                                          <>
+                                                            <option value={1}>
+                                                              L1: -2 điểm
+                                                            </option>
+                                                            <option value={2}>
+                                                              L2: -4 điểm
+                                                            </option>
+                                                            <option value={3}>
+                                                              L3: -6 điểm
+                                                            </option>
+                                                          </>
+                                                        )}
+                                                      </select>
+                                                    )}
+                                                    {rule.pointType ===
+                                                      "conditional" && (
+                                                      <select
+                                                        value={
+                                                          conditionalSelections[
+                                                            rule.code
+                                                          ] ||
+                                                          (rule.conditions &&
+                                                            rule.conditions[0]
+                                                              ?.type) ||
+                                                          "không phép"
+                                                        }
+                                                        onChange={(e) =>
+                                                          handleConditionalSelection(
+                                                            rule.code,
+                                                            e.target.value
+                                                          )
+                                                        }
+                                                        className="px-2 py-1 text-xs border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-purple-500"
+                                                        onClick={(e) =>
+                                                          e.stopPropagation()
+                                                        }
+                                                      >
+                                                        {rule.conditions ? (
+                                                          rule.conditions.map(
+                                                            (condition) => (
+                                                              <option
+                                                                key={
+                                                                  condition.type
+                                                                }
+                                                                value={
+                                                                  condition.type
+                                                                }
+                                                              >
+                                                                {condition.type}
+                                                                :{" "}
+                                                                {
+                                                                  condition.point
+                                                                }{" "}
+                                                                điểm
+                                                              </option>
+                                                            )
+                                                          )
+                                                        ) : (
+                                                          <>
+                                                            <option value="không phép">
+                                                              Không phép: -6
+                                                              điểm
+                                                            </option>
+                                                            <option value="có phép">
+                                                              Có phép: -1 điểm
+                                                            </option>
+                                                          </>
+                                                        )}
+                                                      </select>
+                                                    )}
+                                                    <input
+                                                      type="checkbox"
+                                                      checked={isSelected}
+                                                      onChange={() =>
+                                                        toggleRuleSelection(
+                                                          rule.id
+                                                        )
+                                                      }
+                                                      className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500"
+                                                      onClick={(e) =>
+                                                        e.stopPropagation()
+                                                      }
+                                                    />
+                                                  </div>
+                                                </div>
+                                              );
+                                            }
+                                          )}
+                                        </div>
+                                      )}
+                                    </div>
+                                  )
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        )
+                      )}
                     </div>
                   )}
                 </div>

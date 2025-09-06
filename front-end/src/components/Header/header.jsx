@@ -97,25 +97,135 @@ function Header() {
 
           {/* Desktop Menu */}
           <div className="hidden xl:flex items-center space-x-8 font-medium relative">
-            {/* Diễn đàn - Mục menu riêng biệt (đưa ra ngoài) */}
-            <Link
-              to="/blog"
-              className="flex items-center gap-2 text-gray-700 hover:text-[#064232] transition-colors duration-200 font-medium py-2"
-            >
-              <MessageCircle className="w-4 h-4" style={{ color: "#064232" }} />
-              Diễn đàn
-            </Link>
+            {/* 1. Điểm rèn luyện Dropdown */}
+            <div className="relative group">
+              <div className="flex items-center gap-2 text-gray-700 hover:text-[#064232] transition-colors duration-200 font-medium py-2 cursor-pointer">
+                <BookOpen className="w-4 h-4" style={{ color: "#064232" }} />
+                Điểm rèn luyện
+              </div>
 
-            {/* Chatbot AI - Mục menu riêng biệt */}
-            <Link
-              to="/chatbot"
-              className="flex items-center gap-2 text-gray-700 hover:text-[#064232] transition-colors duration-200 font-medium py-2"
-            >
-              <MessageSquare className="w-4 h-4" style={{ color: "#064232" }} />
-              Chatbot AI
-            </Link>
+              <div
+                className="absolute top-full 
+                 mt-2 w-[640px] bg-white rounded-xl shadow-xl border overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200"
+                style={{ borderColor: "#568F87", zIndex: 9999 }}
+              >
+                <div className="p-6">
+                  <div
+                    className="text-sm font-semibold uppercase tracking-wider mb-4"
+                    style={{ color: "#064232" }}
+                  >
+                    Học tập và rèn luyện
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <Link
+                      to="/rules"
+                      className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 transition-colors"
+                    >
+                      <div
+                        className="w-8 h-8 rounded-lg flex items-center justify-center"
+                        style={{ background: "#FCE3E1" }}
+                      >
+                        <Shield
+                          className="w-4 h-4"
+                          style={{ color: "#064232" }}
+                        />
+                      </div>
+                      <div>
+                        <div
+                          className="font-medium"
+                          style={{ color: "#064232" }}
+                        >
+                          Thang điểm rèn luyện
+                        </div>
+                        <div className="text-sm" style={{ color: "#06423299" }}>
+                          Quy định thang điểm rèn luyện
+                        </div>
+                      </div>
+                    </Link>
 
-            {/* Hoạt động Dropdown */}
+                    <Link
+                      to="/points"
+                      className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 transition-colors"
+                    >
+                      <div
+                        className="w-8 h-8 rounded-lg flex items-center justify-center"
+                        style={{ background: "#FCE3E1" }}
+                      >
+                        <Award
+                          className="w-4 h-4"
+                          style={{ color: "#064232" }}
+                        />
+                      </div>
+                      <div>
+                        <div
+                          className="font-medium"
+                          style={{ color: "#064232" }}
+                        >
+                          Điểm rèn luyện
+                        </div>
+                        <div className="text-sm" style={{ color: "#06423299" }}>
+                          Xem điểm cộng trừ
+                        </div>
+                      </div>
+                    </Link>
+
+                    <Link
+                      to="/points/rules-pdf"
+                      className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 transition-colors"
+                    >
+                      <div
+                        className="w-8 h-8 rounded-lg flex items-center justify-center"
+                        style={{ background: "#FCE3E1" }}
+                      >
+                        <Trophy
+                          className="w-4 h-4"
+                          style={{ color: "#064232" }}
+                        />
+                      </div>
+                      <div>
+                        <div
+                          className="font-medium"
+                          style={{ color: "#064232" }}
+                        >
+                          Nội quy
+                        </div>
+                        <div className="text-sm" style={{ color: "#06423299" }}>
+                          Quy định nội quy
+                        </div>
+                      </div>
+                    </Link>
+
+                    <Link
+                      to="/minhchung"
+                      className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 transition-colors"
+                    >
+                      <div
+                        className="w-8 h-8 rounded-lg flex items-center justify-center"
+                        style={{ background: "#FCE3E1" }}
+                      >
+                        <FileText
+                          className="w-4 h-4"
+                          style={{ color: "#064232" }}
+                        />
+                      </div>
+                      <div>
+                        <div
+                          className="font-medium"
+                          style={{ color: "#064232" }}
+                        >
+                          Minh chứng
+                        </div>
+                        <div className="text-sm" style={{ color: "#06423299" }}>
+                          Tài liệu chứng minh
+                        </div>
+                      </div>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 2. Hoạt động Dropdown */}
             <div className="relative group">
               <div className="flex items-center gap-2 text-gray-700 hover:text-[#064232] transition-colors duration-200 font-medium py-2 cursor-pointer">
                 <Activity className="w-4 h-4" style={{ color: "#064232" }} />
@@ -190,134 +300,7 @@ function Header() {
               </div>
             </div>
 
-            {/* Học tập Dropdown (moved to end) */}
-            <div className="relative group">
-              <div className="flex items-center gap-2 text-gray-700 hover:text-[#064232] transition-colors duration-200 font-medium py-2 cursor-pointer">
-                <BookOpen className="w-4 h-4" style={{ color: "#064232" }} />
-                Điểm rèn luyện
-              </div>
-
-              <div
-                className="absolute top-full right-0 mt-2 w-[640px] bg-white rounded-xl shadow-xl border overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200"
-                style={{ borderColor: "#568F87", zIndex: 9999 }}
-              >
-                <div className="p-6">
-                  <div
-                    className="text-sm font-semibold uppercase tracking-wider mb-4"
-                    style={{ color: "#064232" }}
-                  >
-                    Học tập và rèn luyện
-                  </div>
-                  <div className="grid grid-cols-2 gap-3">
-                    <Link
-                      to="/rules"
-                      className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 transition-colors"
-                    >
-                      <div
-                        className="w-8 h-8 rounded-lg flex items-center justify-center"
-                        style={{ background: "#FCE3E1" }}
-                      >
-                        <Shield
-                          className="w-4 h-4"
-                          style={{ color: "#064232" }}
-                        />
-                      </div>
-                      <div>
-                        <div
-                          className="font-medium"
-                          style={{ color: "#064232" }}
-                        >
-                          Nội quy
-                        </div>
-                        <div className="text-sm" style={{ color: "#06423299" }}>
-                          Quy định trường lớp
-                        </div>
-                      </div>
-                    </Link>
-
-                    <Link
-                      to="/points"
-                      className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 transition-colors"
-                    >
-                      <div
-                        className="w-8 h-8 rounded-lg flex items-center justify-center"
-                        style={{ background: "#FCE3E1" }}
-                      >
-                        <Award
-                          className="w-4 h-4"
-                          style={{ color: "#064232" }}
-                        />
-                      </div>
-                      <div>
-                        <div
-                          className="font-medium"
-                          style={{ color: "#064232" }}
-                        >
-                          Điểm rèn luyện
-                        </div>
-                        <div className="text-sm" style={{ color: "#06423299" }}>
-                          Xem điểm cộng trừ
-                        </div>
-                      </div>
-                    </Link>
-
-                    <Link
-                      to="/points/rules-pdf"
-                      className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 transition-colors"
-                    >
-                      <div
-                        className="w-8 h-8 rounded-lg flex items-center justify-center"
-                        style={{ background: "#FCE3E1" }}
-                      >
-                        <Trophy
-                          className="w-4 h-4"
-                          style={{ color: "#064232" }}
-                        />
-                      </div>
-                      <div>
-                        <div
-                          className="font-medium"
-                          style={{ color: "#064232" }}
-                        >
-                          Thang điểm thi đua
-                        </div>
-                        <div className="text-sm" style={{ color: "#06423299" }}>
-                          Quy định và thang điểm
-                        </div>
-                      </div>
-                    </Link>
-
-                    <Link
-                      to="/minhchung"
-                      className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 transition-colors"
-                    >
-                      <div
-                        className="w-8 h-8 rounded-lg flex items-center justify-center"
-                        style={{ background: "#FCE3E1" }}
-                      >
-                        <FileText
-                          className="w-4 h-4"
-                          style={{ color: "#064232" }}
-                        />
-                      </div>
-                      <div>
-                        <div
-                          className="font-medium"
-                          style={{ color: "#064232" }}
-                        >
-                          Minh chứng
-                        </div>
-                        <div className="text-sm" style={{ color: "#06423299" }}>
-                          Tài liệu chứng minh
-                        </div>
-                      </div>
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Định hướng Dropdown (moved to end) */}
+            {/* 3. Hướng nghiệp Dropdown */}
             <div className="relative group">
               <div className="flex items-center gap-2 text-gray-700 hover:text-[#064232] transition-colors duration-200 font-medium py-2 cursor-pointer">
                 <Compass className="w-4 h-4" style={{ color: "#064232" }} />
@@ -445,7 +428,25 @@ function Header() {
               </div>
             </div>
 
-            {/* Liên hệ - Mục menu riêng biệt */}
+            {/* 4. Chatbot AI - Mục menu riêng biệt */}
+            <Link
+              to="/chatbot"
+              className="flex items-center gap-2 text-gray-700 hover:text-[#064232] transition-colors duration-200 font-medium py-2"
+            >
+              <MessageSquare className="w-4 h-4" style={{ color: "#064232" }} />
+              Chatbot AI
+            </Link>
+
+            {/* 5. Diễn đàn - Mục menu riêng biệt */}
+            <Link
+              to="/blog"
+              className="flex items-center gap-2 text-gray-700 hover:text-[#064232] transition-colors duration-200 font-medium py-2"
+            >
+              <MessageCircle className="w-4 h-4" style={{ color: "#064232" }} />
+              Diễn đàn
+            </Link>
+
+            {/* 6. Liên hệ - Mục menu riêng biệt */}
             <Link
               to="/contact"
               className="flex items-center gap-2 text-gray-700 hover:text-[#064232] transition-colors duration-200 font-medium py-2"
@@ -636,13 +637,127 @@ function Header() {
               </button>
             </div>
 
-            {/* Mobile Định hướng Section */}
+            {/* Mobile Điểm rèn luyện Section */}
             <div className="mb-6">
               <div
                 className="text-sm font-semibold uppercase tracking-wider mb-3 px-2"
                 style={{ color: "#064232" }}
               >
-                Định hướng
+                Điểm rèn luyện
+              </div>
+              <div className="space-y-1">
+                <Link
+                  to="/rules"
+                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 transition-colors"
+                  onClick={() => setShowMobileMenu(false)}
+                  style={{ color: "#064232" }}
+                >
+                  <div
+                    className="w-8 h-8 rounded-lg flex items-center justify-center"
+                    style={{ background: "#FCE3E1" }}
+                  >
+                    <Shield className="w-4 h-4" style={{ color: "#064232" }} />
+                  </div>
+                  <span className="text-sm">Thang điểm rèn luyện</span>
+                </Link>
+                <Link
+                  to="/points"
+                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 transition-colors"
+                  onClick={() => setShowMobileMenu(false)}
+                  style={{ color: "#064232" }}
+                >
+                  <div
+                    className="w-8 h-8 rounded-lg flex items-center justify-center"
+                    style={{ background: "#FCE3E1" }}
+                  >
+                    <Award className="w-4 h-4" style={{ color: "#064232" }} />
+                  </div>
+                  <span className="text-sm">Điểm rèn luyện</span>
+                </Link>
+                <Link
+                  to="/points/rules-pdf"
+                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 transition-colors"
+                  onClick={() => setShowMobileMenu(false)}
+                  style={{ color: "#064232" }}
+                >
+                  <div
+                    className="w-8 h-8 rounded-lg flex items-center justify-center"
+                    style={{ background: "#FCE3E1" }}
+                  >
+                    <Trophy className="w-4 h-4" style={{ color: "#064232" }} />
+                  </div>
+                  <span className="text-sm">Nội quy</span>
+                </Link>
+                <Link
+                  to="/minhchung"
+                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 transition-colors"
+                  onClick={() => setShowMobileMenu(false)}
+                  style={{ color: "#064232" }}
+                >
+                  <div
+                    className="w-8 h-8 rounded-lg flex items-center justify-center"
+                    style={{ background: "#FCE3E1" }}
+                  >
+                    <FileText
+                      className="w-4 h-4"
+                      style={{ color: "#064232" }}
+                    />
+                  </div>
+                  <span className="text-sm">Minh chứng</span>
+                </Link>
+              </div>
+            </div>
+
+            {/* Mobile Hoạt động Section */}
+            <div className="mb-6">
+              <div
+                className="text-sm font-semibold uppercase tracking-wider mb-3 px-2"
+                style={{ color: "#064232" }}
+              >
+                Hoạt động
+              </div>
+              <div className="space-y-1">
+                <Link
+                  to="/activity"
+                  className="menu-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 transition-colors"
+                  onClick={() => setShowMobileMenu(false)}
+                  style={{ color: "#064232" }}
+                >
+                  <div
+                    className="w-8 h-8 rounded-lg flex items-center justify-center"
+                    style={{ background: "#FCE3E1" }}
+                  >
+                    <Users className="w-4 h-4" style={{ color: "#064232" }} />
+                  </div>
+                  <span className="text-sm">Hoạt động</span>
+                </Link>
+                <Link
+                  to="/ai-analysis"
+                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 transition-colors"
+                  onClick={() => setShowMobileMenu(false)}
+                  style={{ color: "#064232" }}
+                >
+                  <div
+                    className="w-8 h-8 rounded-lg flex items-center justify-center"
+                    style={{ background: "#FCE3E1" }}
+                  >
+                    <BarChart3
+                      className="w-4 h-4"
+                      style={{ color: "#064232" }}
+                    />
+                  </div>
+                  <span className="text-sm">AI phân tích</span>
+                </Link>
+              </div>
+            </div>
+
+            {/* Mobile Hướng nghiệp Section */}
+            <div className="mb-6">
+              <div
+                className="text-sm font-semibold uppercase tracking-wider mb-3 px-2"
+                style={{ color: "#064232" }}
+              >
+                Hướng nghiệp
               </div>
               <div className="space-y-1">
                 <Link
@@ -710,49 +825,6 @@ function Header() {
               </div>
             </div>
 
-            {/* Mobile Hoạt động Section */}
-            <div className="mb-6">
-              <div
-                className="text-sm font-semibold uppercase tracking-wider mb-3 px-2"
-                style={{ color: "#064232" }}
-              >
-                Hoạt động
-              </div>
-              <div className="space-y-1">
-                <Link
-                  to="/activity"
-                  className="menu-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 transition-colors"
-                  onClick={() => setShowMobileMenu(false)}
-                  style={{ color: "#064232" }}
-                >
-                  <div
-                    className="w-8 h-8 rounded-lg flex items-center justify-center"
-                    style={{ background: "#FCE3E1" }}
-                  >
-                    <Users className="w-4 h-4" style={{ color: "#064232" }} />
-                  </div>
-                  <span className="text-sm">Hoạt động</span>
-                </Link>
-                <Link
-                  to="/ai-analysis"
-                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 transition-colors"
-                  onClick={() => setShowMobileMenu(false)}
-                  style={{ color: "#064232" }}
-                >
-                  <div
-                    className="w-8 h-8 rounded-lg flex items-center justify-center"
-                    style={{ background: "#FCE3E1" }}
-                  >
-                    <BarChart3
-                      className="w-4 h-4"
-                      style={{ color: "#064232" }}
-                    />
-                  </div>
-                  <span className="text-sm">AI phân tích</span>
-                </Link>
-              </div>
-            </div>
-
             {/* Mobile Chatbot AI Section */}
             <div className="mb-6">
               <div
@@ -780,74 +852,6 @@ function Header() {
                   <span className="text-sm">Chatbot AI</span>
                 </Link>
                 <Link
-                  to="/contact"
-                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 transition-colors"
-                  onClick={() => setShowMobileMenu(false)}
-                  style={{ color: "#064232" }}
-                >
-                  <div
-                    className="w-8 h-8 rounded-lg flex items-center justify-center"
-                    style={{ background: "#FCE3E1" }}
-                  >
-                    <Phone className="w-4 h-4" style={{ color: "#064232" }} />
-                  </div>
-                  <span className="text-sm">Liên hệ</span>
-                </Link>
-              </div>
-            </div>
-
-            {/* Mobile Học tập Section */}
-            <div className="mb-6">
-              <div
-                className="text-sm font-semibold uppercase tracking-wider mb-3 px-2"
-                style={{ color: "#064232" }}
-              >
-                Học tập
-              </div>
-              <div className="space-y-1">
-                <Link
-                  to="/rules"
-                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 transition-colors"
-                  onClick={() => setShowMobileMenu(false)}
-                  style={{ color: "#064232" }}
-                >
-                  <div
-                    className="w-8 h-8 rounded-lg flex items-center justify-center"
-                    style={{ background: "#FCE3E1" }}
-                  >
-                    <Shield className="w-4 h-4" style={{ color: "#064232" }} />
-                  </div>
-                  <span className="text-sm">Nội quy</span>
-                </Link>
-                <Link
-                  to="/points"
-                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 transition-colors"
-                  onClick={() => setShowMobileMenu(false)}
-                  style={{ color: "#064232" }}
-                >
-                  <div
-                    className="w-8 h-8 rounded-lg flex items-center justify-center"
-                    style={{ background: "#FCE3E1" }}
-                  >
-                    <Award className="w-4 h-4" style={{ color: "#064232" }} />
-                  </div>
-                  <span className="text-sm">Điểm rèn luyện</span>
-                </Link>
-                <Link
-                  to="/points/rules-pdf"
-                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 transition-colors"
-                  onClick={() => setShowMobileMenu(false)}
-                  style={{ color: "#064232" }}
-                >
-                  <div
-                    className="w-8 h-8 rounded-lg flex items-center justify-center"
-                    style={{ background: "#FCE3E1" }}
-                  >
-                    <Trophy className="w-4 h-4" style={{ color: "#064232" }} />
-                  </div>
-                  <span className="text-sm">Thang điểm thi đua</span>
-                </Link>
-                <Link
                   to="/blog"
                   className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 transition-colors"
                   onClick={() => setShowMobileMenu(false)}
@@ -865,7 +869,7 @@ function Header() {
                   <span className="text-sm">Diễn đàn</span>
                 </Link>
                 <Link
-                  to="/minhchung"
+                  to="/contact"
                   className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 transition-colors"
                   onClick={() => setShowMobileMenu(false)}
                   style={{ color: "#064232" }}
@@ -874,12 +878,9 @@ function Header() {
                     className="w-8 h-8 rounded-lg flex items-center justify-center"
                     style={{ background: "#FCE3E1" }}
                   >
-                    <FileText
-                      className="w-4 h-4"
-                      style={{ color: "#064232" }}
-                    />
+                    <Phone className="w-4 h-4" style={{ color: "#064232" }} />
                   </div>
-                  <span className="text-sm">Minh chứng</span>
+                  <span className="text-sm">Liên hệ</span>
                 </Link>
               </div>
             </div>
